@@ -99,7 +99,7 @@ export default function Dashboard() {
     }
     if (result) {
       if (result.fire_count > 0 || result.risk_level === "CRITICAL" || result.risk_level === "HIGH") {
-        return { eyeColor: "#F97316", intensity: 3.0, pupilFollow: 0, flameSpeed: 2.0, pupilSize: 0.8 }; // Fire detected
+        return { eyeColor: "#FF2400", intensity: 3.5, pupilFollow: 0, flameSpeed: 2.5, pupilSize: 0.8 }; // Scarlet Fire detected
       }
       return { eyeColor: "#25d8fb", intensity: 1.5, pupilFollow: 1.0, flameSpeed: 0.8, pupilSize: 0.5 }; // No Fire
     }
