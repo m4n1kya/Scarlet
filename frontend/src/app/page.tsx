@@ -108,7 +108,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="relative w-full h-[calc(100vh-56px)] overflow-hidden bg-black">
+    <div className="relative w-full h-screen overflow-hidden bg-black">
       
       {/* Absolute Background Evil Eye */}
       <div className="absolute inset-0 z-0 opacity-80 pointer-events-auto">
@@ -117,7 +117,7 @@ export default function Dashboard() {
 
       <div className="w-full h-full relative pointer-events-none">
         {/* Left Panel: Upload & Controls */}
-        <div className="absolute top-0 left-0 h-full w-full md:w-[380px] bg-black/40 backdrop-blur-md border-r border-gray-800 p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
+        <div className="absolute top-6 bottom-6 left-6 w-full md:w-[380px] bg-black/40 backdrop-blur-md border border-gray-800 rounded-2xl p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
           
           <div className="mb-6">
             <h2 className="text-xl font-bold tracking-tight mb-1 flex items-center gap-2 uppercase text-gray-300">
@@ -237,7 +237,7 @@ export default function Dashboard() {
         </div>
 
         {/* Right Panel: Quick Analysis & Results */}
-        <div className="absolute top-0 right-0 h-full w-full md:w-[380px] bg-black/40 backdrop-blur-md border-l border-gray-800 p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
+        <div className="absolute top-6 bottom-6 right-6 w-full md:w-[380px] bg-black/40 backdrop-blur-md border border-gray-800 rounded-2xl p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
           <h3 className="text-xs font-bold mb-4 text-gray-300 tracking-widest uppercase">Telemetry</h3>
 
           <AnimatePresence mode="wait">

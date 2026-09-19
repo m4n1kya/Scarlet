@@ -17,8 +17,8 @@ export default function Navigation() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-black/80 backdrop-blur-md">
-      <div className="w-full px-6 h-14 flex items-center justify-between">
+    <header className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-black/60 backdrop-blur-lg border border-gray-800 rounded-full px-8 h-12 flex items-center justify-between shadow-2xl">
+      <div className="flex items-center gap-12">
         <div className="flex items-center gap-2">
           <div>
             <h1 className="text-sm font-bold tracking-[0.2em] text-gray-300 uppercase">SCARLET</h1>
@@ -31,7 +31,7 @@ export default function Navigation() {
             const Icon = item.icon;
 
             return (
-              <Link key={item.name} href={item.href} className="relative py-4 group">
+              <Link key={item.name} href={item.href} className="relative py-2 group">
                 <div
                   className={clsx(
                     "flex items-center gap-2 transition-colors text-xs font-semibold tracking-wide uppercase",
