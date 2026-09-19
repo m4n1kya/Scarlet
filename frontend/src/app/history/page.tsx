@@ -36,7 +36,7 @@ export default function History() {
   };
 
   return (
-    <div className="container mx-auto px-6 pt-32 pb-12">
+    <div className="w-full px-12 pt-32 pb-12">
       <div className="space-y-8">
         <div className="flex justify-between items-end">
           <div>

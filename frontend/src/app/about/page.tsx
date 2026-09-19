@@ -1,7 +1,7 @@
 export default function About() {
   return (
-    <div className="container mx-auto px-6 pt-32 pb-12 min-h-screen flex items-start justify-center">
-      <div className="max-w-6xl w-full space-y-12">
+    <div className="w-full px-12 pt-32 pb-12 min-h-screen flex items-start justify-center">
+      <div className="max-w-7xl w-full space-y-12">
         <div className="space-y-4">
           <h1 className="text-4xl font-bold tracking-[0.2em] uppercase text-gray-300">
             About SCARLET

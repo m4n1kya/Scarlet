@@ -35,7 +35,7 @@ export default function Analytics() {
   };
 
   return (
-    <div className="container mx-auto px-6 pt-32 pb-12">
+    <div className="w-full px-12 pt-32 pb-12">
       <div className="space-y-8">
         <div>
           <h1 className="text-4xl font-bold tracking-tight mb-2 flex items-center gap-3">
