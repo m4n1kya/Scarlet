@@ -17,14 +17,14 @@ export default function Navigation() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
+    <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-black/80 backdrop-blur-md">
       <div className="container mx-auto px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-6 h-6 bg-white text-black rounded-sm">
+          <div className="flex items-center justify-center w-6 h-6 bg-gray-400 text-black rounded-sm">
             <span className="font-black text-sm leading-none tracking-tighter">S</span>
           </div>
           <div>
-            <h1 className="text-sm font-bold tracking-[0.2em] text-white uppercase">SCARLET</h1>
+            <h1 className="text-sm font-bold tracking-[0.2em] text-gray-300 uppercase">SCARLET</h1>
           </div>
         </div>
 
@@ -38,7 +38,7 @@ export default function Navigation() {
                 <div
                   className={clsx(
                     "flex items-center gap-2 transition-colors text-xs font-semibold tracking-wide uppercase",
-                    isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300"
+                    isActive ? "text-gray-300" : "text-gray-600 group-hover:text-gray-400"
                   )}
                 >
                   <Icon size={14} />
@@ -47,7 +47,7 @@ export default function Navigation() {
                 {isActive && (
                   <motion.div
                     layoutId="top-nav-underline"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-400"
                     initial={false}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                   />
@@ -57,8 +57,8 @@ export default function Navigation() {
           })}
         </nav>
 
-        <div className="flex items-center gap-2 text-[10px] text-gray-400 font-medium tracking-wide uppercase">
-          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+        <div className="flex items-center gap-2 text-[10px] text-gray-500 font-medium tracking-wide uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-pulse" />
           System Online
         </div>
       </div>
