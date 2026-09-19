@@ -95,16 +95,16 @@ export default function Dashboard() {
   // Determine Evil Eye State based on results
   const getEyeProps = () => {
     if (isProcessing) {
-      return { eyeColor: "#3b82f6", intensity: 2.5, pupilFollow: 3.0, flameSpeed: 3.0, pupilSize: 0.4 }; // Blue scanning
+      return { eyeColor: "#25d8fb", intensity: 2.5, pupilFollow: 3.0, flameSpeed: 3.0, pupilSize: 0.4 }; // Scanning
     }
     if (result) {
-      if (result.risk_level === "CRITICAL" || result.risk_level === "HIGH") {
-        return { eyeColor: "#ef4444", intensity: 3.0, pupilFollow: 0, flameSpeed: 2.0, pupilSize: 0.8 }; // Angry Red
+      if (result.fire_count > 0 || result.risk_level === "CRITICAL" || result.risk_level === "HIGH") {
+        return { eyeColor: "#F97316", intensity: 3.0, pupilFollow: 0, flameSpeed: 2.0, pupilSize: 0.8 }; // Fire detected
       }
-      return { eyeColor: "#22c55e", intensity: 1.0, pupilFollow: 1.0, flameSpeed: 0.5, pupilSize: 0.5 }; // Calm Green
+      return { eyeColor: "#25d8fb", intensity: 1.5, pupilFollow: 1.0, flameSpeed: 0.8, pupilSize: 0.5 }; // No Fire
     }
-    // Default Idle
-    return { eyeColor: "#DC143C", intensity: 1.5, pupilFollow: 1.0, flameSpeed: 1.0, pupilSize: 0.6 }; 
+    // Default Idle (When no import)
+    return { eyeColor: "#617592", intensity: 1.5, pupilFollow: 1.0, flameSpeed: 1.0, pupilSize: 0.6 }; 
   };
 
   return (
