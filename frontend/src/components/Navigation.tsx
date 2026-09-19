@@ -18,7 +18,7 @@ export default function Navigation() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-black/80 backdrop-blur-md">
-      <div className="container mx-auto px-6 h-14 flex items-center justify-between">
+      <div className="w-full px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div>
             <h1 className="text-sm font-bold tracking-[0.2em] text-gray-300 uppercase">SCARLET</h1>

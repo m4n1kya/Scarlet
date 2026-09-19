@@ -1,50 +1,75 @@
 export default function About() {
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="max-w-3xl space-y-8">
-        <div>
-          <h1 className="text-4xl font-bold tracking-tight mb-2">
+    <div className="container mx-auto px-6 py-12">
+      <div className="max-w-4xl space-y-12">
+        <div className="space-y-4">
+          <h1 className="text-4xl font-bold tracking-[0.2em] uppercase text-gray-300">
             About SCARLET
           </h1>
-          <p className="text-gray-400">AI-Powered Wildfire Detection & Monitoring Platform</p>
+          <div className="h-px w-32 bg-gray-600" />
+          <p className="text-gray-500 font-medium tracking-wide uppercase text-sm">
+            AI-Powered Wildfire Detection & Monitoring Platform
+          </p>
         </div>
 
-        <div className="prose prose-invert max-w-none">
-          <p className="text-lg leading-relaxed text-gray-300">
-            SCARLET is an AI-powered computer vision platform designed for detecting fire and smoke in real-time. It leverages a custom-trained YOLOv8 architecture to provide high-speed inference, coupled with a robust risk assessment heuristic engine.
-          </p>
+        <div className="space-y-8 text-gray-400 leading-relaxed text-sm">
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold tracking-widest text-gray-300 uppercase">Architecture Overview</h2>
+            <p>
+              SCARLET is an advanced computer vision telemetry system specifically engineered for the rapid detection of fire and smoke signatures in real-time video feeds. Built on a heavily optimized Ultralytics YOLOv8 architecture, the system provides high-speed, localized inference with minimal latency.
+            </p>
+            <p>
+              The core inference engine is coupled with a robust deterministic risk assessment heuristic. This secondary processing layer evaluates the spatial distribution, confidence scores, and aggregate mass of detected signatures to automatically categorize environmental risk levels, filtering out false positives and ensuring high-fidelity alerting.
+            </p>
+          </section>
 
-          <div className="bg-dark-800 border border-dark-600 rounded-2xl p-6 my-8">
-            <h3 className="text-xl font-semibold mb-4 text-white">Technology Stack</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-              <div>
-                <strong className="block text-scarlet-500">Frontend</strong>
-                <span className="text-gray-400">Next.js, React, TailwindCSS, Framer Motion</span>
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold tracking-widest text-gray-300 uppercase">Technical Stack</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div className="bg-black/40 border border-gray-800 p-6 flex flex-col gap-2 shadow-lg">
+                <span className="text-gray-300 font-bold tracking-widest uppercase text-xs">Inference Layer</span>
+                <span className="text-gray-500">Python, PyTorch, Ultralytics YOLOv8</span>
+                <p className="text-xs mt-2 text-gray-600">Executing sub-100ms predictions on custom weights trained against robust environmental datasets.</p>
               </div>
-              <div>
-                <strong className="block text-scarlet-500">Backend API</strong>
-                <span className="text-gray-400">FastAPI, Python</span>
+              <div className="bg-black/40 border border-gray-800 p-6 flex flex-col gap-2 shadow-lg">
+                <span className="text-gray-300 font-bold tracking-widest uppercase text-xs">API Gateway</span>
+                <span className="text-gray-500">FastAPI</span>
+                <p className="text-xs mt-2 text-gray-600">High-concurrency async REST interface handling telemetry ingestion and image processing queues.</p>
               </div>
-              <div>
-                <strong className="block text-scarlet-500">ML Engine</strong>
-                <span className="text-gray-400">PyTorch, Ultralytics YOLOv8</span>
+              <div className="bg-black/40 border border-gray-800 p-6 flex flex-col gap-2 shadow-lg">
+                <span className="text-gray-300 font-bold tracking-widest uppercase text-xs">Interface</span>
+                <span className="text-gray-500">Next.js, React, Tailwind CSS</span>
+                <p className="text-xs mt-2 text-gray-600">Hardware-accelerated WebGL telemetry visualizer with fully responsive control surfacing.</p>
               </div>
-              <div>
-                <strong className="block text-scarlet-500">Storage</strong>
-                <span className="text-gray-400">SQLite (Local)</span>
+              <div className="bg-black/40 border border-gray-800 p-6 flex flex-col gap-2 shadow-lg">
+                <span className="text-gray-300 font-bold tracking-widest uppercase text-xs">Persistence</span>
+                <span className="text-gray-500">SQLite & File System</span>
+                <p className="text-xs mt-2 text-gray-600">Localized robust logging for temporal analysis of historical detection metrics.</p>
               </div>
             </div>
-          </div>
+          </section>
 
-          <h3 className="text-xl font-semibold mb-4 text-white">Attribution & Licenses</h3>
-          <ul className="space-y-2 text-gray-400">
-            <li><strong>Application Code:</strong> MIT License</li>
-            <li><strong>YOLOv8 Engine:</strong> Ultralytics AGPL-3.0</li>
-            <li><strong>Dataset:</strong> Roboflow fire-wrpgm v8 (CC BY 4.0)</li>
-          </ul>
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold tracking-widest text-gray-300 uppercase">Licenses & Attribution</h2>
+            <div className="bg-gray-900/30 border border-gray-800 p-6 font-mono text-xs space-y-3 shadow-lg">
+              <div className="flex justify-between border-b border-gray-800 pb-2">
+                <span className="text-gray-500">System Source</span>
+                <span className="text-gray-300">MIT License</span>
+              </div>
+              <div className="flex justify-between border-b border-gray-800 pb-2">
+                <span className="text-gray-500">Ultralytics Engine</span>
+                <span className="text-gray-300">AGPL-3.0</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-500">Dataset (Roboflow)</span>
+                <span className="text-gray-300">CC BY 4.0</span>
+              </div>
+            </div>
+          </section>
           
-          <div className="mt-12 pt-8 border-t border-dark-700 text-sm text-gray-500">
-            Developed by Manikya N. (m4n1kya)
+          <div className="pt-12 border-t border-gray-800 flex justify-between items-center">
+            <span className="text-xs font-bold tracking-widest text-gray-500 uppercase">Status: Operational</span>
+            <span className="text-xs font-bold tracking-widest text-gray-600 uppercase">Developed by m4n1kya</span>
           </div>
         </div>
       </div>
