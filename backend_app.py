@@ -126,30 +126,53 @@ def get_analytics():
     records = history_db.get_all()
     
     # Pre-process data for recharts frontend
-    timeline = []
+    timeline_dict = {}
     risk_dist = {"LOW": 0, "MODERATE": 0, "HIGH": 0, "CRITICAL": 0}
+    
+    total_fire_class = 0
+    total_smoke_class = 0
+    total_default_class = 0
     
     for r in records:
         ts = r.get("timestamp", "")
         if ts:
-            # simple grouping by date for timeline
             date = ts.split("T")[0]
-            # Just push all records, let frontend aggregate
-            timeline.append({
-                "date": date,
-                "timestamp": ts,
-                "detections": r.get("total_detections", 0),
-                "fire": r.get("fire_count", 0),
-                "smoke": r.get("smoke_count", 0)
-            })
+            
+            # Aggregate timeline by date
+            if date not in timeline_dict:
+                timeline_dict[date] = {"date": date, "detections": 0, "fire": 0, "smoke": 0, "avg_confidence": 0, "_count": 0}
+                
+            timeline_dict[date]["detections"] += r.get("total_detections", 0)
+            timeline_dict[date]["fire"] += r.get("fire_count", 0)
+            timeline_dict[date]["smoke"] += r.get("smoke_count", 0)
+            timeline_dict[date]["avg_confidence"] += r.get("avg_confidence", 0)
+            timeline_dict[date]["_count"] += 1
             
         risk = r.get("risk_level", "LOW")
         if risk in risk_dist:
             risk_dist[risk] += 1
             
+        total_fire_class += r.get("fire_count", 0)
+        total_smoke_class += r.get("smoke_count", 0)
+        total_default_class += r.get("default_count", 0)
+        
+    timeline = []
+    # Calculate averages for confidence
+    for k, v in sorted(timeline_dict.items()):
+        v["avg_confidence"] = round(v["avg_confidence"] / v["_count"], 2) if v["_count"] > 0 else 0
+        del v["_count"]
+        timeline.append(v)
+            
+    radar_metrics = [
+        {"subject": "Fire", "A": total_fire_class, "fullMark": max(total_fire_class, total_smoke_class, total_default_class, 1)},
+        {"subject": "Smoke", "A": total_smoke_class, "fullMark": max(total_fire_class, total_smoke_class, total_default_class, 1)},
+        {"subject": "Background", "A": total_default_class, "fullMark": max(total_fire_class, total_smoke_class, total_default_class, 1)}
+    ]
+
     return {
         "stats": stats,
         "timeline": timeline,
+        "radar_metrics": radar_metrics,
         "risk_distribution": [{"name": k, "value": v} for k, v in risk_dist.items()]
     }
 
