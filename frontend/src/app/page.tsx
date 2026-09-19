@@ -108,16 +108,20 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black">
+    <div className="relative w-full h-screen overflow-hidden">
       
       {/* Absolute Background Evil Eye */}
       <div className="absolute inset-0 z-0 opacity-80 pointer-events-auto">
-        <EvilEye {...getEyeProps()} />
+        <EvilEye {...getEyeProps()} backgroundColor="#0a0a0a" />
+      </div>
+
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+        <h1 className="text-xs font-bold tracking-[0.4em] text-gray-600 uppercase">SCARLET</h1>
       </div>
 
       <div className="w-full h-full relative pointer-events-none">
         {/* Left Panel: Upload & Controls */}
-        <div className="absolute top-6 bottom-6 left-6 w-full md:w-[380px] bg-black/40 backdrop-blur-md border border-gray-800 rounded-2xl p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
+        <div className="absolute top-6 bottom-6 left-6 w-full md:w-[380px] bg-white/[0.02] backdrop-blur-md border border-white/5 rounded-2xl p-6 flex flex-col z-10 shadow-[0_8px_32px_rgba(0,0,0,0.8)] overflow-y-auto custom-scrollbar pointer-events-auto">
           
           <div className="mb-6">
             <h2 className="text-xl font-bold tracking-tight mb-1 flex items-center gap-2 uppercase text-gray-300">
@@ -148,7 +152,7 @@ export default function Dashboard() {
               </button>
             </div>
 
-            <div className="border border-gray-800 rounded-lg bg-black/40 overflow-hidden relative backdrop-blur-sm">
+            <div className="border border-white/5 rounded-lg bg-black/20 overflow-hidden relative backdrop-blur-sm">
               {mode === "image" ? (
                 <div
                   onDragOver={handleDragOver}
@@ -156,7 +160,7 @@ export default function Dashboard() {
                   onDrop={handleDrop}
                   className={clsx(
                     "text-center transition-all cursor-pointer h-[180px] flex flex-col items-center justify-center relative",
-                    isDragging ? "border-2 border-gray-500 bg-gray-800/50" : "hover:bg-gray-900/50",
+                    isDragging ? "border-2 border-gray-500 bg-gray-800/50" : "hover:bg-white/[0.02]",
                     preview ? "p-0 border-0" : "p-4"
                   )}
                   onClick={() => !preview && document.getElementById('file-upload')?.click()}
@@ -214,10 +218,10 @@ export default function Dashboard() {
               onClick={() => mode === "image" ? processDetection() : captureWebcam()}
               disabled={(mode === "image" && !file) || isProcessing}
               className={clsx(
-                "w-full py-3 rounded-md font-bold transition-all duration-300 shadow-lg text-xs uppercase tracking-widest",
+                "w-full py-3 rounded-md font-bold transition-all duration-300 shadow-lg text-xs uppercase tracking-widest border",
                 ((mode === "image" && !file) || isProcessing) 
-                  ? "bg-gray-900/50 text-gray-700 border border-gray-800 cursor-not-allowed" 
-                  : "bg-gray-400 text-black hover:bg-gray-300"
+                  ? "bg-white/[0.02] text-gray-700 border-white/5 cursor-not-allowed" 
+                  : "bg-gray-300 text-black border-transparent hover:bg-white"
               )}
             >
               {isProcessing ? (
@@ -237,7 +241,7 @@ export default function Dashboard() {
         </div>
 
         {/* Right Panel: Quick Analysis & Results */}
-        <div className="absolute top-6 bottom-6 right-6 w-full md:w-[380px] bg-black/40 backdrop-blur-md border border-gray-800 rounded-2xl p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
+        <div className="absolute top-6 bottom-6 right-6 w-full md:w-[380px] bg-white/[0.02] backdrop-blur-md border border-white/5 rounded-2xl p-6 flex flex-col z-10 shadow-[0_8px_32px_rgba(0,0,0,0.8)] overflow-y-auto custom-scrollbar pointer-events-auto">
           <h3 className="text-xs font-bold mb-4 text-gray-300 tracking-widest uppercase">Telemetry</h3>
 
           <AnimatePresence mode="wait">
