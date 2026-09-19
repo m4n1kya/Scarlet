@@ -17,49 +17,49 @@ export default function Navigation() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-dark-700 bg-dark-900/80 backdrop-blur">
-      <div className="container mx-auto px-4 h-12 flex items-center justify-between">
+    <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-black/80 backdrop-blur-md">
+      <div className="container mx-auto px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="p-1 bg-scarlet-700/20 rounded-md text-scarlet-700">
-            <Flame size={16} />
+          <div className="flex items-center justify-center w-6 h-6 bg-white text-black rounded-sm">
+            <span className="font-black text-sm leading-none tracking-tighter">S</span>
           </div>
           <div>
-            <h1 className="text-base font-bold tracking-wider text-white leading-tight">SCARLET</h1>
+            <h1 className="text-sm font-bold tracking-[0.2em] text-white uppercase">SCARLET</h1>
           </div>
         </div>
 
-        <nav className="hidden md:flex items-center gap-1">
+        <nav className="hidden md:flex items-center gap-6">
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const Icon = item.icon;
 
             return (
-              <Link key={item.name} href={item.href} className="relative px-2 py-1.5">
-                {isActive && (
-                  <motion.div
-                    layoutId="top-nav-bg"
-                    className="absolute inset-0 bg-scarlet-700/10 rounded-md"
-                    initial={false}
-                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                  />
-                )}
+              <Link key={item.name} href={item.href} className="relative py-4 group">
                 <div
                   className={clsx(
-                    "relative flex items-center gap-1.5 transition-colors z-10 text-xs font-medium",
-                    isActive ? "text-scarlet-500" : "text-gray-400 hover:text-gray-200"
+                    "flex items-center gap-2 transition-colors text-xs font-semibold tracking-wide uppercase",
+                    isActive ? "text-white" : "text-gray-500 group-hover:text-gray-300"
                   )}
                 >
                   <Icon size={14} />
                   <span>{item.name}</span>
                 </div>
+                {isActive && (
+                  <motion.div
+                    layoutId="top-nav-underline"
+                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"
+                    initial={false}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
               </Link>
             );
           })}
         </nav>
 
-        <div className="flex items-center gap-1.5 text-[10px] text-green-400 font-medium bg-dark-800 px-2 py-1 rounded-full border border-dark-600">
-          <span className="w-1 h-1 rounded-full bg-green-400 animate-pulse" />
-          API Connected
+        <div className="flex items-center gap-2 text-[10px] text-gray-400 font-medium tracking-wide uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+          System Online
         </div>
       </div>
     </header>
