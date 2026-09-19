@@ -1,0 +1,51 @@
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Testing
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Environment
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Generated outputs (user-specific)
+outputs/*.jpg
+outputs/*.png
+outputs/*.mp4
+outputs/*.avi
+outputs/*.csv
+outputs/*.json
+outputs/scarlet_history.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Distribution
+dist/
+build/
+*.egg-info/
