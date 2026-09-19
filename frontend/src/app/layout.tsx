@@ -17,12 +17,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} bg-dark-900 text-white min-h-screen flex`}>
+      <body className={`${inter.className} bg-dark-900 text-white min-h-screen flex flex-col`}>
         <Navigation />
-        <main className="flex-1 overflow-y-auto pl-64">
-          <div className="max-w-7xl mx-auto p-8">
-            {children}
-          </div>
+        <main className="flex-1 overflow-hidden relative">
+          {children}
         </main>
       </body>
     </html>
