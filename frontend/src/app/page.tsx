@@ -115,8 +115,8 @@ export default function Dashboard() {
         <EvilEye {...getEyeProps()} />
       </div>
 
-      {/* Side Panel Overlay (Moved to left, more transparent) */}
-      <div className="absolute top-0 left-0 h-full w-full md:w-[380px] bg-dark-900/40 backdrop-blur-2xl border-r border-white/5 p-4 flex flex-col z-10 overflow-y-auto custom-scrollbar shadow-2xl">
+      {/* Left Panel: Upload & Controls */}
+      <div className="absolute top-0 left-0 h-full w-full md:w-[380px] bg-dark-900/40 backdrop-blur-2xl border-r border-white/5 p-4 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar">
         
         <div className="mb-4">
           <h2 className="text-xl font-bold tracking-tight mb-0.5 flex items-center gap-1.5">
@@ -233,76 +233,83 @@ export default function Dashboard() {
             )}
           </button>
         </div>
-
-        {/* Results */}
-        <div className="flex-1 flex flex-col relative overflow-hidden border-t border-white/10 pt-4">
-          <h3 className="text-xs font-semibold mb-3 text-gray-300 tracking-wide uppercase">Telemetry</h3>
-
-          <AnimatePresence mode="wait">
-            {!result ? (
-              <motion.div 
-                key="empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="flex-1 flex flex-col items-center justify-center text-center text-gray-500 space-y-2"
-              >
-                <ShieldCheck size={24} className="opacity-20" />
-                <p className="text-[10px]">Awaiting telemetry data.</p>
-              </motion.div>
-            ) : (
-              <motion.div 
-                key="result"
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex-1 flex flex-col space-y-3 overflow-y-auto custom-scrollbar pb-2"
-              >
-                {/* Result Image */}
-                <div className="rounded-lg overflow-hidden border border-white/10 shadow-lg relative bg-black/50">
-                  <img src={result.annotated_image_base64} alt="Annotated" className="w-full h-auto object-contain max-h-[200px]" />
-                  
-                  <div className="absolute top-1.5 right-1.5">
-                    <span className={clsx(
-                      "px-2 py-0.5 rounded-full font-bold text-[10px] shadow-xl backdrop-blur-md border",
-                      result.risk_level === "CRITICAL" ? "bg-red-500/20 text-red-400 border-red-500/50" :
-                      result.risk_level === "HIGH" ? "bg-orange-500/20 text-orange-400 border-orange-500/50" :
-                      result.risk_level === "MODERATE" ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/50" :
-                      "bg-green-500/20 text-green-400 border-green-500/50"
-                    )}>
-                      {result.risk_level} RISK
-                    </span>
-                  </div>
-                </div>
-
-                {/* Metrics */}
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="bg-white/5 border border-white/5 p-2 rounded-lg flex items-center justify-between">
-                    <span className="text-gray-400 text-[10px] font-medium">🔥 Fire</span>
-                    <span className="text-sm font-bold text-white">{result.fire_count}</span>
-                  </div>
-                  <div className="bg-white/5 border border-white/5 p-2 rounded-lg flex items-center justify-between">
-                    <span className="text-gray-400 text-[10px] font-medium">💨 Smoke</span>
-                    <span className="text-sm font-bold text-white">{result.smoke_count}</span>
-                  </div>
-                  <div className="bg-white/5 border border-white/5 p-2 rounded-lg flex items-center justify-between col-span-2">
-                    <span className="text-gray-400 text-[10px] font-medium">🎯 Peak Confidence</span>
-                    <span className="text-sm font-bold text-white">{(result.max_confidence * 100).toFixed(1)}%</span>
-                  </div>
-                </div>
-
-                {/* Heuristic Description */}
-                <div className="bg-scarlet-900/20 p-2 rounded-lg flex items-start gap-1.5 border border-scarlet-500/20 text-[10px]">
-                  <AlertTriangle className="text-scarlet-500 shrink-0 mt-0.5" size={12} />
-                  <p className="text-gray-300 leading-relaxed">
-                    {result.risk_description}
-                  </p>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
       </div>
+
+      {/* Right Panel: Quick Analysis & Results */}
+      <div className="absolute top-0 right-0 h-full w-full md:w-[380px] bg-dark-900/40 backdrop-blur-2xl border-l border-white/5 p-4 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar">
+        <h3 className="text-xs font-semibold mb-3 text-gray-300 tracking-wide uppercase">Quick Analysis</h3>
+
+        <AnimatePresence mode="wait">
+          {!result ? (
+            <motion.div 
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex-1 flex flex-col items-center justify-center text-center text-gray-500 space-y-2"
+            >
+              <ShieldCheck size={24} className="opacity-20" />
+              <p className="text-[10px]">Awaiting telemetry data.</p>
+            </motion.div>
+          ) : (
+            <motion.div 
+              key="result"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex-1 flex flex-col space-y-3"
+            >
+              {/* Result Image */}
+              <div className="rounded-lg overflow-hidden border border-white/10 shadow-lg relative bg-black/50">
+                <img src={result.annotated_image_base64} alt="Annotated" className="w-full h-auto object-contain max-h-[200px]" />
+                
+                <div className="absolute top-1.5 right-1.5">
+                  <span className={clsx(
+                    "px-2 py-0.5 rounded-full font-bold text-[10px] shadow-xl backdrop-blur-md border",
+                    result.risk_level === "CRITICAL" ? "bg-red-500/20 text-red-400 border-red-500/50" :
+                    result.risk_level === "HIGH" ? "bg-orange-500/20 text-orange-400 border-orange-500/50" :
+                    result.risk_level === "MODERATE" ? "bg-yellow-500/20 text-yellow-400 border-yellow-500/50" :
+                    "bg-green-500/20 text-green-400 border-green-500/50"
+                  )}>
+                    {result.risk_level} RISK
+                  </span>
+                </div>
+              </div>
+
+              {/* Metrics */}
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-white/5 border border-white/5 p-2 rounded-lg flex items-center justify-between">
+                  <span className="text-gray-400 text-[10px] font-medium">🔥 Fire</span>
+                  <span className="text-sm font-bold text-white">{result.fire_count}</span>
+                </div>
+                <div className="bg-white/5 border border-white/5 p-2 rounded-lg flex items-center justify-between">
+                  <span className="text-gray-400 text-[10px] font-medium">💨 Smoke</span>
+                  <span className="text-sm font-bold text-white">{result.smoke_count}</span>
+                </div>
+                <div className="bg-white/5 border border-white/5 p-2 rounded-lg flex items-center justify-between col-span-2">
+                  <span className="text-gray-400 text-[10px] font-medium">🎯 Peak Confidence</span>
+                  <span className="text-sm font-bold text-white">{(result.max_confidence * 100).toFixed(1)}%</span>
+                </div>
+              </div>
+
+              {/* Heuristic Description */}
+              <div className="bg-scarlet-900/20 p-2 rounded-lg flex items-start gap-1.5 border border-scarlet-500/20 text-[10px]">
+                <AlertTriangle className="text-scarlet-500 shrink-0 mt-0.5" size={12} />
+                <p className="text-gray-300 leading-relaxed">
+                  {result.risk_description}
+                </p>
+              </div>
+
+              {/* Detailed Analysis Button */}
+              <div className="mt-auto pt-4 border-t border-white/10">
+                <a href="/analytics" className="w-full flex items-center justify-center gap-2 py-2 bg-dark-800 border border-dark-600 hover:border-scarlet-500/50 text-gray-300 hover:text-white rounded-lg transition text-xs font-medium">
+                  <Activity size={14} className="text-scarlet-500" /> View Detailed Analysis
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
     </div>
   );
 }
