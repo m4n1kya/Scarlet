@@ -116,7 +116,7 @@ export default function Dashboard() {
       </div>
 
       {/* Left Panel: Upload & Controls */}
-      <div className="absolute top-0 left-0 h-full w-full md:w-[380px] bg-dark-900/40 backdrop-blur-2xl border-r border-white/5 p-4 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar">
+      <div className="absolute top-0 left-0 h-full w-full md:w-[380px] bg-dark-900/10 backdrop-blur-md border-r border-white/5 p-4 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
         
         <div className="mb-4">
           <h2 className="text-xl font-bold tracking-tight mb-0.5 flex items-center gap-1.5">
@@ -236,7 +236,7 @@ export default function Dashboard() {
       </div>
 
       {/* Right Panel: Quick Analysis & Results */}
-      <div className="absolute top-0 right-0 h-full w-full md:w-[380px] bg-dark-900/40 backdrop-blur-2xl border-l border-white/5 p-4 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar">
+      <div className="absolute top-0 right-0 h-full w-full md:w-[380px] bg-dark-900/10 backdrop-blur-md border-l border-white/5 p-4 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
         <h3 className="text-xs font-semibold mb-3 text-gray-300 tracking-wide uppercase">Quick Analysis</h3>
 
         <AnimatePresence mode="wait">
