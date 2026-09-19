@@ -298,13 +298,6 @@ export default function Dashboard() {
                   {result.risk_description}
                 </p>
               </div>
-
-              {/* Detailed Analysis Button */}
-              <div className="mt-auto pt-4 border-t border-white/10">
-                <a href="/analytics" className="w-full flex items-center justify-center gap-2 py-2 bg-dark-800 border border-dark-600 hover:border-scarlet-500/50 text-gray-300 hover:text-white rounded-lg transition text-xs font-medium">
-                  <Activity size={14} className="text-scarlet-500" /> View Detailed Analysis
-                </a>
-              </div>
             </motion.div>
           )}
         </AnimatePresence>
