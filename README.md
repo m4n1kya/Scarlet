@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/docs/banner.png" alt="SCARLET Banner" width="100%" />
 
-  # SCARLET 🔥
+  # SCARLET
   
   **AI-Powered Wildfire Detection & Monitoring Platform**
   
@@ -17,7 +17,7 @@
 
 ---
 
-## 📖 Overview
+## Overview
 
 **SCARLET** is an advanced computer vision platform designed to detect fire and smoke hazards from images, video streams, and live webcam feeds. Built on a custom-trained **YOLOv8** architecture, it provides high-speed, high-accuracy inference.
 
@@ -25,17 +25,17 @@ Beyond simple detection, SCARLET implements a **Risk Heuristic Engine** that ana
 
 ---
 
-## ✨ Features
+## Features
 
-- **🚀 Real-time Inference:** Lightning-fast detection powered by PyTorch and Ultralytics YOLOv8.
-- **🧠 Risk Heuristic Engine:** Proprietary algorithm that evaluates the severity of the detection.
-- **📸 Multi-Modal Input:** Support for static images, video processing, and live webcam streams.
-- **📊 Interactive Analytics:** Deep visual insights using Recharts and an integrated SQLite data logger.
-- **⚡ Decoupled Architecture:** A lightweight, premium Next.js frontend paired with a heavy-duty FastAPI Python backend.
+- **Real-time Inference:** Lightning-fast detection powered by PyTorch and Ultralytics YOLOv8.
+- **Risk Heuristic Engine:** Proprietary algorithm that evaluates the severity of the detection.
+- **Multi-Modal Input:** Support for static images, video processing, and live webcam streams.
+- **Interactive Analytics:** Deep visual insights using Recharts and an integrated SQLite data logger.
+- **Decoupled Architecture:** A lightweight, premium Next.js frontend paired with a heavy-duty FastAPI Python backend.
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 SCARLET employs a modern decoupled architecture, allowing for scalable deployments where the heavy GPU ML tasks are separated from the client-facing UI.
 
@@ -51,7 +51,7 @@ graph TD;
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 To run SCARLET locally, you need to spin up both the FastAPI backend and the Next.js frontend.
 
@@ -91,7 +91,7 @@ npm run dev
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```text
 SCARLET/
@@ -111,19 +111,19 @@ SCARLET/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit pull requests, report issues, and request features.
 
 ---
 
-## 📜 License & Attributions
+## License & Attributions
 
 - **Codebase:** Distributed under the MIT License.
 - **ML Engine:** Powered by [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics) (AGPL-3.0).
-- **Dataset:** Initial model trained on the [Roboflow fire-wrpgm v8](https://universe.roboflow.com/custom-thxhn/fire-wrpgm/dataset/8) dataset (CC BY 4.0).
+- **Dataset:** Initial model trained on the [Roboflow fire-wrpgm v8](https://universe.roboflow.com/custom-thxhn/fire-wrpgm/dataset/8) (CC BY 4.0).
 
 <div align="center">
   <br>
-  Developed with ❤️ by <a href="https://github.com/m4n1kya">Manikya N.</a>
+  Developed by <a href="https://github.com/m4n1kya">Manikya N.</a>
 </div>

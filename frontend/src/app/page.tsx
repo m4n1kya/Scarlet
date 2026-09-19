@@ -7,12 +7,12 @@ import axios from "axios";
 import clsx from "clsx";
 
 interface DetectionResult {
-  fire_count: int;
-  smoke_count: int;
-  default_count: int;
-  total_detections: int;
-  max_confidence: float;
-  avg_confidence: float;
+  fire_count: number;
+  smoke_count: number;
+  default_count: number;
+  total_detections: number;
+  max_confidence: number;
+  avg_confidence: number;
   risk_level: string;
   risk_description: string;
   annotated_image_base64: string;
