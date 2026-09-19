@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { Upload, Camera as CameraIcon, AlertTriangle, ShieldCheck, Zap } from "lucide-react";
+import { Upload, Camera as CameraIcon, AlertTriangle, ShieldCheck, Zap, Activity } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import clsx from "clsx";
