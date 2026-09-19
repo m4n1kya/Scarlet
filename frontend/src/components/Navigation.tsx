@@ -20,9 +20,6 @@ export default function Navigation() {
     <header className="sticky top-0 z-50 w-full border-b border-gray-800 bg-black/80 backdrop-blur-md">
       <div className="container mx-auto px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="flex items-center justify-center w-6 h-6 bg-gray-400 text-black rounded-sm">
-            <span className="font-black text-sm leading-none tracking-tighter">S</span>
-          </div>
           <div>
             <h1 className="text-sm font-bold tracking-[0.2em] text-gray-300 uppercase">SCARLET</h1>
           </div>

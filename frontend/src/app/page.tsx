@@ -115,194 +115,196 @@ export default function Dashboard() {
         <EvilEye {...getEyeProps()} />
       </div>
 
-      {/* Left Panel: Upload & Controls */}
-      <div className="absolute top-0 left-0 h-full w-full md:w-[380px] bg-black/40 backdrop-blur-md border-r border-gray-800 p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
-        
-        <div className="mb-6">
-          <h2 className="text-xl font-bold tracking-tight mb-1 flex items-center gap-2 uppercase text-gray-300">
-            Control Center
-          </h2>
-          <p className="text-xs text-gray-500 font-medium">Initialize Inference Engine</p>
-        </div>
-
-        {/* Controls */}
-        <div className="space-y-4 mb-6 shrink-0">
-          <div className="bg-gray-900/50 border border-gray-800 p-1 rounded-md flex relative">
-            <motion.div 
-              className="absolute inset-y-1 bg-gray-700 rounded-sm shadow w-[calc(50%-4px)] transition-all z-0"
-              animate={{ x: mode === "image" ? 4 : 'calc(100% + 4px)' }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            />
-            <button 
-              onClick={() => { setMode("image"); setResult(null); }}
-              className={clsx("flex-1 py-1.5 z-10 text-xs font-bold transition-colors uppercase tracking-wider", mode === "image" ? "text-gray-200" : "text-gray-500 hover:text-gray-300")}
-            >
-              Image
-            </button>
-            <button 
-              onClick={() => { setMode("webcam"); setResult(null); }}
-              className={clsx("flex-1 py-1.5 z-10 text-xs font-bold transition-colors uppercase tracking-wider", mode === "webcam" ? "text-gray-200" : "text-gray-500 hover:text-gray-300")}
-            >
-              Webcam
-            </button>
+      <div className="container mx-auto h-full relative pointer-events-none">
+        {/* Left Panel: Upload & Controls */}
+        <div className="absolute top-0 left-6 h-full w-full md:w-[380px] bg-black/40 backdrop-blur-md border-x border-gray-800 p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
+          
+          <div className="mb-6">
+            <h2 className="text-xl font-bold tracking-tight mb-1 flex items-center gap-2 uppercase text-gray-300">
+              Control Center
+            </h2>
+            <p className="text-xs text-gray-500 font-medium">Initialize Inference Engine</p>
           </div>
 
-          <div className="border border-gray-800 rounded-lg bg-black/40 overflow-hidden relative backdrop-blur-sm">
-            {mode === "image" ? (
-              <div
-                onDragOver={handleDragOver}
-                onDragLeave={handleDragLeave}
-                onDrop={handleDrop}
-                className={clsx(
-                  "text-center transition-all cursor-pointer h-[180px] flex flex-col items-center justify-center relative",
-                  isDragging ? "border-2 border-gray-500 bg-gray-800/50" : "hover:bg-gray-900/50",
-                  preview ? "p-0 border-0" : "p-4"
-                )}
-                onClick={() => !preview && document.getElementById('file-upload')?.click()}
+          {/* Controls */}
+          <div className="space-y-4 mb-6 shrink-0">
+            <div className="bg-gray-900/50 border border-gray-800 p-1 rounded-md flex relative">
+              <motion.div 
+                className="absolute inset-y-1 bg-gray-700 rounded-sm shadow w-[calc(50%-4px)] transition-all z-0"
+                animate={{ x: mode === "image" ? 4 : 'calc(100% + 4px)' }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
+              <button 
+                onClick={() => { setMode("image"); setResult(null); }}
+                className={clsx("flex-1 py-1.5 z-10 text-xs font-bold transition-colors uppercase tracking-wider", mode === "image" ? "text-gray-200" : "text-gray-500 hover:text-gray-300")}
               >
-                <input
-                  id="file-upload"
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={(e) => e.target.files && handleFileSelect(e.target.files[0])}
-                />
-                
-                {preview ? (
-                  <div className="relative w-full h-full group">
-                    <img src={preview} alt="Preview" className="w-full h-full object-contain" />
-                    <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <button 
-                        onClick={(e) => { e.stopPropagation(); document.getElementById('file-upload')?.click(); }}
-                        className="px-4 py-2 bg-gray-400 text-black hover:bg-gray-300 rounded-sm font-bold text-xs uppercase tracking-wide transition-colors"
-                      >
-                        Change Media
-                      </button>
+                Image
+              </button>
+              <button 
+                onClick={() => { setMode("webcam"); setResult(null); }}
+                className={clsx("flex-1 py-1.5 z-10 text-xs font-bold transition-colors uppercase tracking-wider", mode === "webcam" ? "text-gray-200" : "text-gray-500 hover:text-gray-300")}
+              >
+                Webcam
+              </button>
+            </div>
+
+            <div className="border border-gray-800 rounded-lg bg-black/40 overflow-hidden relative backdrop-blur-sm">
+              {mode === "image" ? (
+                <div
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={clsx(
+                    "text-center transition-all cursor-pointer h-[180px] flex flex-col items-center justify-center relative",
+                    isDragging ? "border-2 border-gray-500 bg-gray-800/50" : "hover:bg-gray-900/50",
+                    preview ? "p-0 border-0" : "p-4"
+                  )}
+                  onClick={() => !preview && document.getElementById('file-upload')?.click()}
+                >
+                  <input
+                    id="file-upload"
+                    type="file"
+                    className="hidden"
+                    accept="image/*"
+                    onChange={(e) => e.target.files && handleFileSelect(e.target.files[0])}
+                  />
+                  
+                  {preview ? (
+                    <div className="relative w-full h-full group">
+                      <img src={preview} alt="Preview" className="w-full h-full object-contain" />
+                      <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); document.getElementById('file-upload')?.click(); }}
+                          className="px-4 py-2 bg-gray-400 text-black hover:bg-gray-300 rounded-sm font-bold text-xs uppercase tracking-wide transition-colors"
+                        >
+                          Change Media
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                ) : (
-                  <div className="flex flex-col items-center justify-center space-y-3 pointer-events-none">
-                    <div className="w-12 h-12 border border-gray-700 rounded-full flex items-center justify-center">
-                      <Upload className="text-gray-500" size={20} />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center space-y-3 pointer-events-none">
+                      <div className="w-12 h-12 border border-gray-700 rounded-full flex items-center justify-center">
+                        <Upload className="text-gray-500" size={20} />
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Drag & Drop</p>
+                        <p className="text-[10px] text-gray-600 uppercase tracking-widest mt-1">Or click to browse</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Drag & Drop</p>
-                      <p className="text-[10px] text-gray-600 uppercase tracking-widest mt-1">Or click to browse</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="h-[180px] bg-black flex items-center justify-center relative overflow-hidden">
-                <Webcam
-                  audio={false}
-                  ref={webcamRef}
-                  screenshotFormat="image/jpeg"
-                  className="w-full h-full object-cover"
-                  videoConstraints={{ facingMode: "user" }}
-                />
-                <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/80 px-2 py-1 rounded-sm border border-gray-800 text-[9px] font-bold tracking-widest uppercase">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-pulse"></span>
-                  LIVE
+                  )}
                 </div>
-              </div>
-            )}
+              ) : (
+                <div className="h-[180px] bg-black flex items-center justify-center relative overflow-hidden">
+                  <Webcam
+                    audio={false}
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                    className="w-full h-full object-cover"
+                    videoConstraints={{ facingMode: "user" }}
+                  />
+                  <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/80 px-2 py-1 rounded-sm border border-gray-800 text-[9px] font-bold tracking-widest uppercase">
+                    <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-pulse"></span>
+                    LIVE
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={() => mode === "image" ? processDetection() : captureWebcam()}
+              disabled={(mode === "image" && !file) || isProcessing}
+              className={clsx(
+                "w-full py-3 rounded-md font-bold transition-all duration-300 shadow-lg text-xs uppercase tracking-widest",
+                ((mode === "image" && !file) || isProcessing) 
+                  ? "bg-gray-900/50 text-gray-700 border border-gray-800 cursor-not-allowed" 
+                  : "bg-gray-400 text-black hover:bg-gray-300"
+              )}
+            >
+              {isProcessing ? (
+                <span className="flex items-center justify-center gap-2">
+                  <div className="w-3.5 h-3.5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                  Processing...
+                </span>
+              ) : mode === "webcam" ? (
+                <span className="flex items-center justify-center gap-2">
+                  <CameraIcon size={14} /> Capture & Analyze
+                </span>
+              ) : (
+                "Initialize Inference"
+              )}
+            </button>
           </div>
-
-          <button
-            onClick={() => mode === "image" ? processDetection() : captureWebcam()}
-            disabled={(mode === "image" && !file) || isProcessing}
-            className={clsx(
-              "w-full py-3 rounded-md font-bold transition-all duration-300 shadow-lg text-xs uppercase tracking-widest",
-              ((mode === "image" && !file) || isProcessing) 
-                ? "bg-gray-900/50 text-gray-700 border border-gray-800 cursor-not-allowed" 
-                : "bg-gray-400 text-black hover:bg-gray-300"
-            )}
-          >
-            {isProcessing ? (
-              <span className="flex items-center justify-center gap-2">
-                <div className="w-3.5 h-3.5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                Processing...
-              </span>
-            ) : mode === "webcam" ? (
-              <span className="flex items-center justify-center gap-2">
-                <CameraIcon size={14} /> Capture & Analyze
-              </span>
-            ) : (
-              "Initialize Inference"
-            )}
-          </button>
         </div>
+
+        {/* Right Panel: Quick Analysis & Results */}
+        <div className="absolute top-0 right-6 h-full w-full md:w-[380px] bg-black/40 backdrop-blur-md border-x border-gray-800 p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
+          <h3 className="text-xs font-bold mb-4 text-gray-300 tracking-widest uppercase">Telemetry</h3>
+
+          <AnimatePresence mode="wait">
+            {!result ? (
+              <motion.div 
+                key="empty"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="flex-1 flex flex-col items-center justify-center text-center text-gray-700 space-y-3"
+              >
+                <ShieldCheck size={28} className="opacity-20" />
+                <p className="text-[10px] font-medium uppercase tracking-widest">Awaiting telemetry data</p>
+              </motion.div>
+            ) : (
+              <motion.div 
+                key="result"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="flex-1 flex flex-col space-y-4"
+              >
+                {/* Result Image */}
+                <div className="rounded-lg overflow-hidden border border-gray-800 shadow-xl relative bg-black/80">
+                  <img src={result.annotated_image_base64} alt="Annotated" className="w-full h-auto object-contain max-h-[220px]" />
+                  
+                  <div className="absolute top-2 right-2">
+                    <span className={clsx(
+                      "px-2.5 py-1 rounded-sm font-bold text-[9px] uppercase tracking-widest border backdrop-blur-md",
+                      result.risk_level === "CRITICAL" ? "bg-gray-300 text-black border-gray-300" :
+                      result.risk_level === "HIGH" ? "bg-gray-500 text-black border-gray-500" :
+                      result.risk_level === "MODERATE" ? "bg-gray-700 text-gray-200 border-gray-600" :
+                      "bg-black text-gray-400 border-gray-800"
+                    )}>
+                      {result.risk_level} RISK
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metrics */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between">
+                    <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Fire count</span>
+                    <span className="text-lg font-bold text-gray-300">{result.fire_count}</span>
+                  </div>
+                  <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between">
+                    <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Smoke count</span>
+                    <span className="text-lg font-bold text-gray-300">{result.smoke_count}</span>
+                  </div>
+                  <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between col-span-2">
+                    <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Peak Confidence</span>
+                    <span className="text-lg font-bold text-gray-300">{(result.max_confidence * 100).toFixed(1)}%</span>
+                  </div>
+                </div>
+
+                {/* Heuristic Description */}
+                <div className="bg-gray-900/30 p-3 rounded-md flex items-start gap-2 border border-gray-800 text-xs">
+                  <AlertTriangle className="text-gray-400 shrink-0 mt-0.5" size={14} />
+                  <p className="text-gray-400 font-medium leading-relaxed">
+                    {result.risk_description}
+                  </p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
       </div>
-
-      {/* Right Panel: Quick Analysis & Results */}
-      <div className="absolute top-0 right-0 h-full w-full md:w-[380px] bg-black/40 backdrop-blur-md border-l border-gray-800 p-6 flex flex-col z-10 shadow-2xl overflow-y-auto custom-scrollbar pointer-events-auto">
-        <h3 className="text-xs font-bold mb-4 text-gray-300 tracking-widest uppercase">Telemetry</h3>
-
-        <AnimatePresence mode="wait">
-          {!result ? (
-            <motion.div 
-              key="empty"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="flex-1 flex flex-col items-center justify-center text-center text-gray-700 space-y-3"
-            >
-              <ShieldCheck size={28} className="opacity-20" />
-              <p className="text-[10px] font-medium uppercase tracking-widest">Awaiting telemetry data</p>
-            </motion.div>
-          ) : (
-            <motion.div 
-              key="result"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="flex-1 flex flex-col space-y-4"
-            >
-              {/* Result Image */}
-              <div className="rounded-lg overflow-hidden border border-gray-800 shadow-xl relative bg-black/80">
-                <img src={result.annotated_image_base64} alt="Annotated" className="w-full h-auto object-contain max-h-[220px]" />
-                
-                <div className="absolute top-2 right-2">
-                  <span className={clsx(
-                    "px-2.5 py-1 rounded-sm font-bold text-[9px] uppercase tracking-widest border backdrop-blur-md",
-                    result.risk_level === "CRITICAL" ? "bg-gray-300 text-black border-gray-300" :
-                    result.risk_level === "HIGH" ? "bg-gray-500 text-black border-gray-500" :
-                    result.risk_level === "MODERATE" ? "bg-gray-700 text-gray-200 border-gray-600" :
-                    "bg-black text-gray-400 border-gray-800"
-                  )}>
-                    {result.risk_level} RISK
-                  </span>
-                </div>
-              </div>
-
-              {/* Metrics */}
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between">
-                  <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Fire count</span>
-                  <span className="text-lg font-bold text-gray-300">{result.fire_count}</span>
-                </div>
-                <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between">
-                  <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Smoke count</span>
-                  <span className="text-lg font-bold text-gray-300">{result.smoke_count}</span>
-                </div>
-                <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between col-span-2">
-                  <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Peak Confidence</span>
-                  <span className="text-lg font-bold text-gray-300">{(result.max_confidence * 100).toFixed(1)}%</span>
-                </div>
-              </div>
-
-              {/* Heuristic Description */}
-              <div className="bg-gray-900/30 p-3 rounded-md flex items-start gap-2 border border-gray-800 text-xs">
-                <AlertTriangle className="text-gray-400 shrink-0 mt-0.5" size={14} />
-                <p className="text-gray-400 font-medium leading-relaxed">
-                  {result.risk_description}
-                </p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
     </div>
   );
 }
