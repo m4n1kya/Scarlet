@@ -83,13 +83,13 @@ export default function Dashboard() {
     }
   };
 
-  const captureWebcam = useCallback(() => {
+  const captureWebcam = () => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setResult(null);
       processDetection(imageSrc);
     }
-  }, [webcamRef]);
+  };
 
   return (
     <div className="space-y-8">
