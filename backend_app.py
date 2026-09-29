@@ -117,7 +117,7 @@ async def detect_image(
         )
         
         # Resize output image to speed up base64 encoding and transmission if it's too large
-        max_dim = 1280
+        max_dim = 1280  # Optimize base64 encoding
         h, w = annotated.shape[:2]
         if max(h, w) > max_dim:
             scale = max_dim / max(h, w)
