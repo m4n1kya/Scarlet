@@ -40,6 +40,10 @@ class DetectResponse(BaseModel):
     risk_level: str
     risk_description: str
     annotated_image_base64: str
+    inference_time_ms: float
+    device: str
+    fire_area_est: float
+    dispatch_status: str
 
 @app.get("/")
 def read_root():
@@ -61,6 +65,7 @@ async def detect_image(
     confidence: float = Form(0.25),
     iou: float = Form(0.45)
 ):
+    import time
     try:
         if file:
             contents = await file.read()
@@ -77,12 +82,26 @@ async def detect_image(
         else:
             raise HTTPException(status_code=400, detail="Must provide file or image_base64")
 
+        start_time = time.time()
+        
         # Run detection
         result = detector.detect(image, confidence=confidence, iou=iou)
         annotated = ImageProcessor.draw_detections(image, result)
         
+        end_time = time.time()
+        inference_time_ms = round((end_time - start_time) * 1000, 2)
+        
         # Risk heuristic
         risk = ScarletRiskHeuristic.assess_image(result)
+        
+        # Calculate dispatch status
+        dispatch_status = "NO FIRE DETECTED"
+        if risk.value == "CRITICAL":
+            dispatch_status = "EVACUATE"
+        elif risk.value == "HIGH":
+            dispatch_status = "DEPLOY UNITS"
+        elif risk.value == "MODERATE":
+            dispatch_status = "INVESTIGATE"
         
         # Save to history
         history_db.save(
@@ -97,8 +116,15 @@ async def detect_image(
             risk_level=risk.value
         )
         
+        # Resize output image to speed up base64 encoding and transmission if it's too large
+        max_dim = 1280
+        h, w = annotated.shape[:2]
+        if max(h, w) > max_dim:
+            scale = max_dim / max(h, w)
+            annotated = cv2.resize(annotated, (int(w * scale), int(h * scale)))
+
         # Encode output image
-        _, buffer = cv2.imencode('.jpg', annotated)
+        _, buffer = cv2.imencode('.jpg', annotated, [cv2.IMWRITE_JPEG_QUALITY, 85])
         encoded_img = base64.b64encode(buffer).decode('utf-8')
         
         return {
@@ -110,7 +136,11 @@ async def detect_image(
             "avg_confidence": result.avg_confidence,
             "risk_level": risk.value,
             "risk_description": ScarletRiskHeuristic.get_risk_description(risk),
-            "annotated_image_base64": f"data:image/jpeg;base64,{encoded_img}"
+            "annotated_image_base64": f"data:image/jpeg;base64,{encoded_img}",
+            "inference_time_ms": inference_time_ms,
+            "device": detector.device_info,
+            "fire_area_est": result.fire_area_est,
+            "dispatch_status": dispatch_status
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
