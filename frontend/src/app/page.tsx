@@ -18,6 +18,10 @@ interface DetectionResult {
   risk_level: string;
   risk_description: string;
   annotated_image_base64: string;
+  inference_time_ms: number;
+  device: string;
+  fire_area_est: number;
+  dispatch_status: string;
 }
 
 export default function Dashboard() {
@@ -283,6 +287,22 @@ export default function Dashboard() {
                 {/* Metrics */}
                 <div className="grid grid-cols-2 gap-3">
                   <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between">
+                    <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Burn Area Est.</span>
+                    <span className="text-lg font-bold text-gray-300">{result.fire_area_est.toFixed(1)}%</span>
+                  </div>
+                  <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between">
+                    <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Dispatch Status</span>
+                    <span className={clsx(
+                      "text-[10px] font-bold uppercase",
+                      result.dispatch_status === "EVACUATE" ? "text-red-500" :
+                      result.dispatch_status === "DEPLOY UNITS" ? "text-orange-500" :
+                      result.dispatch_status === "INVESTIGATE" ? "text-yellow-500" :
+                      "text-green-500"
+                    )}>
+                      {result.dispatch_status}
+                    </span>
+                  </div>
+                  <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between">
                     <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Fire count</span>
                     <span className="text-lg font-bold text-gray-300">{result.fire_count}</span>
                   </div>
@@ -290,9 +310,13 @@ export default function Dashboard() {
                     <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Smoke count</span>
                     <span className="text-lg font-bold text-gray-300">{result.smoke_count}</span>
                   </div>
-                  <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between col-span-2">
-                    <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Peak Confidence</span>
+                  <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between">
+                    <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Peak Conf.</span>
                     <span className="text-lg font-bold text-gray-300">{(result.max_confidence * 100).toFixed(1)}%</span>
+                  </div>
+                  <div className="bg-gray-900/30 border border-gray-800 p-3 rounded-md flex flex-col justify-between">
+                    <span className="text-gray-500 text-[9px] font-bold uppercase tracking-widest mb-1">Latency</span>
+                    <span className="text-lg font-bold text-scarlet-500">{result.inference_time_ms} ms</span>
                   </div>
                 </div>
 
