@@ -51,7 +51,7 @@ export default function Dashboard() {
     }
   };
 
-  const handleFileSelect = (selectedFile: File) => {
+  // Process uploaded file`n  const handleFileSelect = (selectedFile: File) => {
     setFile(selectedFile);
     setResult(null);
     const reader = new FileReader();
