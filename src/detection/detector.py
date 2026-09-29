@@ -28,6 +28,7 @@ class DetectionResult:
     total_detections: int = 0
     max_confidence: float = 0.0
     avg_confidence: float = 0.0
+    fire_area_est: float = 0.0
 
 
 class ScarletDetector:
@@ -124,10 +125,12 @@ class ScarletDetector:
         fire_count = 0
         smoke_count = 0
         default_count = 0
+        fire_area = 0.0
 
         if result.boxes is not None and len(result.boxes) > 0:
             for box in result.boxes:
                 b = box.xyxy[0].cpu().numpy().tolist()
+                b_n = box.xyxyn[0].cpu().numpy().tolist()
                 c = float(box.conf[0].cpu().numpy())
                 cls_id = int(box.cls[0].cpu().numpy())
                 cls_name = self.CLASS_NAMES.get(cls_id, "Unknown")
@@ -136,9 +139,12 @@ class ScarletDetector:
                 confidences.append(c)
                 class_ids.append(cls_id)
                 class_names.append(cls_name)
+                
+                area = (b_n[2] - b_n[0]) * (b_n[3] - b_n[1])
 
                 if cls_name == "Fire":
                     fire_count += 1
+                    fire_area += area
                 elif cls_name == "smoke":
                     smoke_count += 1
                 elif cls_name == "default":
@@ -147,6 +153,9 @@ class ScarletDetector:
         total = len(boxes)
         max_conf = max(confidences) if confidences else 0.0
         avg_conf = sum(confidences) / total if total > 0 else 0.0
+        
+        # Cap at 1.0 (100%) in case of overlapping boxes
+        fire_area_est = min(fire_area, 1.0) * 100
 
         return DetectionResult(
             boxes=boxes,
