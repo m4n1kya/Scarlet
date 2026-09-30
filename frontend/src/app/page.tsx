@@ -269,7 +269,7 @@ export default function Dashboard() {
               >
                 {/* Result Image */}
                 <div className="rounded-lg overflow-hidden border border-gray-800 shadow-xl relative bg-black/80">
-                  <img src={result.annotated_image_base64} alt="Annotated" className="w-full h-auto object-contain max-h-[220px]" />
+                  <img src={result.annotated_image_base64} alt="Annotated detection results" className="w-full h-auto object-contain max-h-[220px]" />
                   
                   <div className="absolute top-2 right-2">
                     <span className={clsx(
