@@ -24,7 +24,7 @@ interface DetectionResult {
   dispatch_status: string;
 }
 
-export default function Dashboard() {
+export default function Dashboard(): JSX.Element {
   const [mode, setMode] = useState<"image" | "webcam">("image");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
