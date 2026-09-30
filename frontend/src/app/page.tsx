@@ -131,7 +131,7 @@ export default function Dashboard() {
             <h2 className="text-xl font-bold tracking-tight mb-1 flex items-center gap-2 uppercase text-gray-300">
               Control Center
             </h2>
-            <p className="text-xs text-gray-500 font-medium">Initialize Inference Engine</p>
+            <p className="text-xs text-gray-500 font-medium">Initialize Detection Engine</p>
           </div>
 
           {/* Controls */}
