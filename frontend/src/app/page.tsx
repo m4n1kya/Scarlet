@@ -88,7 +88,7 @@ export default function Dashboard(): JSX.Element {
     }
   };
 
-  const captureWebcam = () => {
+  // Capture frame from webcam stream`n  const captureWebcam = () => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setResult(null);
