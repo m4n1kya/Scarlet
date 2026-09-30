@@ -97,7 +97,7 @@ export default function Dashboard(): JSX.Element {
   };
 
   // Determine Evil Eye State based on results
-  const getEyeProps = () => {
+  // Determine Evil Eye visual state`n  const getEyeProps = () => {
     if (isProcessing) {
       return { eyeColor: "#25d8fb", intensity: 2.5, pupilFollow: 3.0, flameSpeed: 3.0, pupilSize: 0.4, scale: 0.65 }; // Scanning
     }
