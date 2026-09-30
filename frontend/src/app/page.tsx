@@ -258,7 +258,7 @@ export default function Dashboard() {
                 className="flex-1 flex flex-col items-center justify-center text-center text-gray-700 space-y-3"
               >
                 <ShieldCheck size={28} className="opacity-20" />
-                <p className="text-[10px] font-medium uppercase tracking-widest">Awaiting telemetry data</p>
+                <p className="text-[10px] font-medium uppercase tracking-widest">Awaiting telemetry data...</p>
               </motion.div>
             ) : (
               <motion.div 
