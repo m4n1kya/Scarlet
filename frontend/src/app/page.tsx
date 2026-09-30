@@ -34,7 +34,7 @@ export default function Dashboard(): JSX.Element {
   
   const webcamRef = useRef<Webcam>(null);
 
-  const handleDragOver = (e: React.DragEvent) => {
+  // File drag handlers`n  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
