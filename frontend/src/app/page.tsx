@@ -195,7 +195,7 @@ export default function Dashboard() {
                         <Upload className="text-gray-500" size={20} />
                       </div>
                       <div>
-                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Drag & Drop</p>
+                        <p className="text-xs font-bold text-gray-400 uppercase tracking-wide">Drag and Drop</p>
                         <p className="text-[10px] text-gray-600 uppercase tracking-widest mt-1">Or click to browse</p>
                       </div>
                     </div>
