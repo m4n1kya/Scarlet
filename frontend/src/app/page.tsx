@@ -179,7 +179,7 @@ export default function Dashboard() {
                   
                   {preview ? (
                     <div className="relative w-full h-full group">
-                      <img src={preview} alt="Preview" className="w-full h-full object-contain" />
+                      <img src={preview} alt="Uploaded image preview" className="w-full h-full object-contain" />
                       <div className="absolute inset-0 bg-black/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                         <button 
                           onClick={(e) => { e.stopPropagation(); document.getElementById('file-upload')?.click(); }}
