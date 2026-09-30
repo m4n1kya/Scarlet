@@ -82,7 +82,7 @@ export default function Dashboard(): JSX.Element {
       setResult(response.data);
     } catch (error) {
       console.error("API Error during inference", error);
-      alert("Failed to process image. Make sure the backend is running.");
+      alert("Detection failed. Make sure the backend is running.");
     } finally {
       setIsProcessing(false);
     }
