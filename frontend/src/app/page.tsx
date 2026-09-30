@@ -8,7 +8,7 @@ import clsx from "clsx";
 import Webcam from "react-webcam";
 import EvilEye from "@/components/EvilEye";
 
-interface DetectionResult {
+/** API Response Interface */`ninterface DetectionResult {
   fire_count: number;
   smoke_count: number;
   default_count: number;
