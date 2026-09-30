@@ -185,7 +185,7 @@ export default function Dashboard() {
                           onClick={(e) => { e.stopPropagation(); document.getElementById('file-upload')?.click(); }}
                           className="px-4 py-2 bg-gray-400 text-black hover:bg-gray-300 rounded-sm font-bold text-xs uppercase tracking-wide transition-colors"
                         >
-                          Change Media
+                          Replace Media
                         </button>
                       </div>
                     </div>
