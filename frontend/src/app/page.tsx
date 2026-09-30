@@ -59,7 +59,7 @@ export default function Dashboard(): JSX.Element {
     reader.readAsDataURL(selectedFile);
   };
 
-  const processDetection = async (base64Image?: string) => {
+  // Process image via API`n  const processDetection = async (base64Image?: string) => {
     setIsProcessing(true);
     const formData = new FormData();
     formData.append("confidence", "0.25");
