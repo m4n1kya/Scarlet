@@ -32,3 +32,4 @@
 - fix(api): Handle corrupted image uploads gracefully
 - refactor(ml): Modularize detection result parsing
 - style(ml): Clean up unused imports in heuristic.py
+- chore: Add strict typing to core python functions
