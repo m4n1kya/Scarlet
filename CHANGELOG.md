@@ -41,3 +41,4 @@
 - style(ui): Adjust line-height for better readability
 - chore: Prepare for major version release
 - docs: Add acknowledgments for datasets used
+- perf(ml): Document batch processing strategy for videos
