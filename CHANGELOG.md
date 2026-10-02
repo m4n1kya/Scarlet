@@ -30,3 +30,4 @@
 - docs: Add troubleshooting section to README
 - ui: Improve mobile responsiveness of telemetry grid
 - fix(api): Handle corrupted image uploads gracefully
+- refactor(ml): Modularize detection result parsing
