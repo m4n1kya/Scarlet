@@ -21,3 +21,4 @@
 - perf(ui): Implement memoization for chart data
 - chore: Add github issue templates
 - docs: Add system architecture diagram notes
+- fix(ml): Ensure minimum confidence threshold is respected
