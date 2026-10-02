@@ -36,3 +36,4 @@
 - docs: Document websocket potential for live feeds
 - perf(ui): Lazy load heavy chart components
 - ui: Standardize typography across analytics tabs
+- fix(ui): Resolve hydration mismatch in history page
