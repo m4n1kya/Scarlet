@@ -42,3 +42,4 @@
 - chore: Prepare for major version release
 - docs: Add acknowledgments for datasets used
 - perf(ml): Document batch processing strategy for videos
+- chore: Final polish and minor typo fixes
