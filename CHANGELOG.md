@@ -1,2 +1,3 @@
 - docs: Initialize CHANGELOG for project tracking
 - perf(api): Optimize inference payload parsing
+- refactor(ui): Abstract telemetry components
