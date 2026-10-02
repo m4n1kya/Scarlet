@@ -3,3 +3,4 @@
 - refactor(ui): Abstract telemetry components
 - style(ui): Adjust grid spacing for dashboard metrics
 - chore(deps): Update minor dependencies in package.json
+- fix(ml): Handle edge cases in bounding box calculations
