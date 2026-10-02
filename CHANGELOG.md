@@ -31,3 +31,4 @@
 - ui: Improve mobile responsiveness of telemetry grid
 - fix(api): Handle corrupted image uploads gracefully
 - refactor(ml): Modularize detection result parsing
+- style(ml): Clean up unused imports in heuristic.py
