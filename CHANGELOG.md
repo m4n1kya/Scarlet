@@ -18,3 +18,4 @@
 - docs: Outline deployment steps for production
 - refactor(ui): Optimize state management in page.tsx
 - style(ui): Remove redundant tailwind classes
+- perf(ui): Implement memoization for chart data
