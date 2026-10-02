@@ -34,3 +34,4 @@
 - style(ml): Clean up unused imports in heuristic.py
 - chore: Add strict typing to core python functions
 - docs: Document websocket potential for live feeds
+- perf(ui): Lazy load heavy chart components
