@@ -26,3 +26,4 @@
 - refactor: Consolidate configuration constants
 - style: Enforce consistent quote marks in frontend
 - chore: Update npm audit fix recommendations
+- perf(api): Reduce memory footprint during cv2 encoding
