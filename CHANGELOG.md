@@ -39,3 +39,4 @@
 - fix(ui): Resolve hydration mismatch in history page
 - refactor: Move configuration to centralized env file loader
 - style(ui): Adjust line-height for better readability
+- chore: Prepare for major version release
