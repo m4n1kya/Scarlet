@@ -8,3 +8,4 @@
 - test(api): Scaffold pytest structure for backend
 - ui: Refine evil eye animation timings
 - chore: Clean up unused react icons in dashboard
+- perf(ml): Add notes for potential tensorrt optimizations
