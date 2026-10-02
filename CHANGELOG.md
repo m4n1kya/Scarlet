@@ -5,3 +5,4 @@
 - chore(deps): Update minor dependencies in package.json
 - fix(ml): Handle edge cases in bounding box calculations
 - docs(api): Add inline comments to fastapi routes
+- test(api): Scaffold pytest structure for backend
