@@ -40,3 +40,4 @@
 - refactor: Move configuration to centralized env file loader
 - style(ui): Adjust line-height for better readability
 - chore: Prepare for major version release
+- docs: Add acknowledgments for datasets used
