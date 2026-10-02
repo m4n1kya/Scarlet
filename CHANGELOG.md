@@ -35,3 +35,4 @@
 - chore: Add strict typing to core python functions
 - docs: Document websocket potential for live feeds
 - perf(ui): Lazy load heavy chart components
+- ui: Standardize typography across analytics tabs
