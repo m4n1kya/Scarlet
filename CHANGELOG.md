@@ -37,3 +37,4 @@
 - perf(ui): Lazy load heavy chart components
 - ui: Standardize typography across analytics tabs
 - fix(ui): Resolve hydration mismatch in history page
+- refactor: Move configuration to centralized env file loader
