@@ -1,0 +1,1 @@
+- docs: Initialize CHANGELOG for project tracking
