@@ -12,3 +12,4 @@
 - refactor(api): Streamline risk heuristic logic
 - docs: Update contributing guidelines placeholder
 - style(api): Apply PEP-8 formatting to detector.py
+- ui: Enhance contrast on critical risk labels
