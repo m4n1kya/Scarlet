@@ -11,3 +11,4 @@
 - perf(ml): Add notes for potential tensorrt optimizations
 - refactor(api): Streamline risk heuristic logic
 - docs: Update contributing guidelines placeholder
+- style(api): Apply PEP-8 formatting to detector.py
