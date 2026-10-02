@@ -25,3 +25,4 @@
 - ui: Add subtle hover transitions to upload zone
 - refactor: Consolidate configuration constants
 - style: Enforce consistent quote marks in frontend
+- chore: Update npm audit fix recommendations
