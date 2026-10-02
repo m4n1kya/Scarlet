@@ -15,3 +15,4 @@
 - ui: Enhance contrast on critical risk labels
 - chore: Audit python requirements for security
 - fix(ui): Prevent double-clicks on inference button
+- docs: Outline deployment steps for production
