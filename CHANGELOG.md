@@ -2,3 +2,4 @@
 - perf(api): Optimize inference payload parsing
 - refactor(ui): Abstract telemetry components
 - style(ui): Adjust grid spacing for dashboard metrics
+- chore(deps): Update minor dependencies in package.json
