@@ -28,3 +28,4 @@
 - chore: Update npm audit fix recommendations
 - perf(api): Reduce memory footprint during cv2 encoding
 - docs: Add troubleshooting section to README
+- ui: Improve mobile responsiveness of telemetry grid
