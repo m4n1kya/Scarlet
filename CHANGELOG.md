@@ -29,3 +29,4 @@
 - perf(api): Reduce memory footprint during cv2 encoding
 - docs: Add troubleshooting section to README
 - ui: Improve mobile responsiveness of telemetry grid
+- fix(api): Handle corrupted image uploads gracefully
