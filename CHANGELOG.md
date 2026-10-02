@@ -27,3 +27,4 @@
 - style: Enforce consistent quote marks in frontend
 - chore: Update npm audit fix recommendations
 - perf(api): Reduce memory footprint during cv2 encoding
+- docs: Add troubleshooting section to README
