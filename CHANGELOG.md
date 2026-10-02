@@ -7,3 +7,4 @@
 - docs(api): Add inline comments to fastapi routes
 - test(api): Scaffold pytest structure for backend
 - ui: Refine evil eye animation timings
+- chore: Clean up unused react icons in dashboard
