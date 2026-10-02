@@ -20,3 +20,4 @@
 - style(ui): Remove redundant tailwind classes
 - perf(ui): Implement memoization for chart data
 - chore: Add github issue templates
+- docs: Add system architecture diagram notes
