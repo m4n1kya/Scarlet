@@ -24,3 +24,4 @@
 - fix(ml): Ensure minimum confidence threshold is respected
 - ui: Add subtle hover transitions to upload zone
 - refactor: Consolidate configuration constants
+- style: Enforce consistent quote marks in frontend
