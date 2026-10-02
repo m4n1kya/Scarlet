@@ -33,3 +33,4 @@
 - refactor(ml): Modularize detection result parsing
 - style(ml): Clean up unused imports in heuristic.py
 - chore: Add strict typing to core python functions
+- docs: Document websocket potential for live feeds
