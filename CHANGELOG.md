@@ -22,3 +22,4 @@
 - chore: Add github issue templates
 - docs: Add system architecture diagram notes
 - fix(ml): Ensure minimum confidence threshold is respected
+- ui: Add subtle hover transitions to upload zone
