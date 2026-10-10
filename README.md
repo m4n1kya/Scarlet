@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="assets/docs/banner.jpeg" alt="SCARLET Banner" width="100%" />
 
   # SCARLET
   
