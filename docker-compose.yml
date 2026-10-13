@@ -1,0 +1,32 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scarlet-api
+    ports:
+      - "8000:7860"
+    environment:
+      - SCARLET_CONFIDENCE=0.25
+      - SCARLET_IOU=0.45
+      - SCARLET_DEVICE=auto
+      - SCARLET_OUTPUT_DIR=outputs
+    volumes:
+      - ./outputs:/app/outputs
+    restart: unless-stopped
+
+  frontend:
+    image: node:20-alpine
+    container_name: scarlet-web
+    working_dir: /app
+    command: sh -c "npm ci && npm run build && npm run start"
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    restart: unless-stopped
