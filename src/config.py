@@ -25,10 +25,10 @@ class ScarletConfig:
 
 
 def get_project_root() -> Path:
-    """Walk up from this file to find the project root (directory containing app.py)."""
+    """Walk up from this file to find the project root."""
     current = Path(__file__).resolve().parent
     while current != current.parent:
-        if (current / "app.py").exists():
+        if (current / "backend_app.py").exists() or (current / "pyproject.toml").exists():
             return current
         current = current.parent
     # Fallback: assume src/ is one level below root

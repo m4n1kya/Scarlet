@@ -36,7 +36,8 @@ Videos:
 """
 
     @staticmethod
-    # Assesses a single image frame for risk levels`n    def assess_image(result: DetectionResult) -> RiskLevel:
+    def assess_image(result: DetectionResult) -> RiskLevel:
+        """Assess a single image frame for wildfire risk levels."""
         if result.total_detections == 0 or result.max_confidence < 0.15:
             return RiskLevel.LOW
             

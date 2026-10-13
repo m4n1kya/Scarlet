@@ -8,7 +8,8 @@ import clsx from "clsx";
 import Webcam from "react-webcam";
 import EvilEye from "@/components/EvilEye";
 
-/** API Response Interface */`ninterface DetectionResult {
+/** API Response Interface */
+interface DetectionResult {
   fire_count: number;
   smoke_count: number;
   default_count: number;
@@ -24,7 +25,7 @@ import EvilEye from "@/components/EvilEye";
   dispatch_status: string;
 }
 
-export default function Dashboard(): JSX.Element {
+export default function Dashboard() {
   const [mode, setMode] = useState<"image" | "webcam">("image");
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
@@ -34,7 +35,8 @@ export default function Dashboard(): JSX.Element {
   
   const webcamRef = useRef<Webcam>(null);
 
-  // File drag handlers`n  const handleDragOver = (e: React.DragEvent) => {
+  // File drag handlers
+  const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragging(true);
   };
@@ -51,7 +53,8 @@ export default function Dashboard(): JSX.Element {
     }
   };
 
-  // Process uploaded file`n  const handleFileSelect = (selectedFile: File) => {
+  // Process uploaded file
+  const handleFileSelect = (selectedFile: File) => {
     setFile(selectedFile);
     setResult(null);
     const reader = new FileReader();
@@ -59,7 +62,8 @@ export default function Dashboard(): JSX.Element {
     reader.readAsDataURL(selectedFile);
   };
 
-  // Process image via API`n  const processDetection = async (base64Image?: string) => {
+  // Process image via API
+  const processDetection = async (base64Image?: string) => {
     setIsProcessing(true);
     const formData = new FormData();
     formData.append("confidence", "0.25");
@@ -88,7 +92,8 @@ export default function Dashboard(): JSX.Element {
     }
   };
 
-  // Capture frame from webcam stream`n  const captureWebcam = () => {
+  // Capture frame from webcam stream
+  const captureWebcam = () => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setResult(null);
@@ -97,7 +102,7 @@ export default function Dashboard(): JSX.Element {
   };
 
   // Determine Evil Eye State based on results
-  // Determine Evil Eye visual state`n  const getEyeProps = () => {
+  const getEyeProps = () => {
     if (isProcessing) {
       return { eyeColor: "#25d8fb", intensity: 2.5, pupilFollow: 3.0, flameSpeed: 3.0, pupilSize: 0.4, scale: 0.65 }; // Scanning
     }

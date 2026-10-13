@@ -1,5 +1,4 @@
 <div align="center">
-  <img src="assets/docs/banner.jpeg" alt="SCARLET Banner" width="100%" />
 
   <h1>SCARLET</h1>
   <p><strong>AI-Powered Wildfire & Smoke Detection, Telemetry, and Risk Assessment Platform</strong></p>
