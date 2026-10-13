@@ -1,129 +1,263 @@
 <div align="center">
   <img src="assets/docs/banner.jpeg" alt="SCARLET Banner" width="100%" />
 
-  # SCARLET
-  
-  **AI-Powered Wildfire Detection & Monitoring Platform**
-  
-  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-  [![Python](https://img.shields.io/badge/Python-3.12-blue.svg)](https://python.org)
-  [![PyTorch](https://img.shields.io/badge/PyTorch-GPU-ee4c2c.svg)](https://pytorch.org/)
-  [![Next.js](https://img.shields.io/badge/Next.js-15-black?logo=next.js)](https://nextjs.org/)
-  [![FastAPI](https://img.shields.io/badge/FastAPI-API-00a67d?logo=fastapi)](https://fastapi.tiangolo.com/)
-  
-  *Detect, monitor, and assess wildfire and smoke hazards in real-time with state-of-the-art computer vision.*
+  <h1>SCARLET</h1>
+  <p><strong>AI-Powered Wildfire & Smoke Detection, Telemetry, and Risk Assessment Platform</strong></p>
 
+  <p>
+    <a href="https://github.com/m4n1kya/Scarlet/actions/workflows/ci.yml"><img src="https://github.com/m4n1kya/Scarlet/actions/workflows/ci.yml/badge.svg" alt="CI Status" /></a>
+    <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" /></a>
+    <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white" alt="Python 3.11+" /></a>
+    <a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch" /></a>
+    <a href="https://github.com/ultralytics/ultralytics"><img src="https://img.shields.io/badge/YOLOv8-Ultralytics-00FFFF" alt="YOLOv8" /></a>
+    <a href="https://fastapi.tiangolo.com/"><img src="https://img.shields.io/badge/FastAPI-0.100%2B-009688?logo=fastapi&logoColor=white" alt="FastAPI" /></a>
+    <a href="https://nextjs.org/"><img src="https://img.shields.io/badge/Next.js-16-000000?logo=next.js&logoColor=white" alt="Next.js" /></a>
+  </p>
+
+  <p>
+    <a href="#-overview">Overview</a> •
+    <a href="#-system-architecture">Architecture</a> •
+    <a href="#-risk-heuristic--dispatch-matrix">Risk Engine</a> •
+    <a href="#-getting-started">Getting Started</a> •
+    <a href="#-api-reference">API Reference</a> •
+    <a href="#-repository-structure">Project Structure</a>
+  </p>
 </div>
 
 ---
 
-## Overview
+## 📌 Overview
 
-**SCARLET** is an advanced computer vision platform designed to detect fire and smoke hazards from images, video streams, and live webcam feeds. Built on a custom-trained **YOLOv8** architecture, it provides high-speed, high-accuracy inference.
+**SCARLET** is a production-grade computer vision and emergency telemetry platform designed to detect wildfire and smoke signatures in real time from static imagery, video streams, and live optical feeds.
 
-Beyond simple detection, SCARLET implements a **Risk Heuristic Engine** that analyzes detection density, confidence distributions, and temporal patterns to assign hazard levels (LOW, MODERATE, HIGH, CRITICAL) in real-time.
+Built on a decoupled **FastAPI + PyTorch (YOLOv8)** inference backend and a **Next.js** reactive command center, SCARLET goes beyond raw bounding-box prediction. It incorporates a deterministic **Risk Heuristic Engine** that evaluates flame density, normalized viewport burn coverage, and confidence distributions to issue automated operational dispatch directives.
+
+### Key Capabilities
+
+| Capability | Technical Implementation |
+| :--- | :--- |
+| **Real-Time Object Detection** | Custom-trained **YOLOv8** architecture (`models/best.pt`) detecting `Fire`, `smoke`, and background anomaly (`default`) classes with GPU/CPU auto-selection. |
+| **Viewport Burn Area Estimation** | Computes normalized bounding-box coverage (`xyxyn`) to quantify the exact percentage of the camera viewport actively engulfed in flames (`fire_area_est`). |
+| **Heuristic Hazard Classification** | Multi-factor evaluation via [`ScarletRiskHeuristic`](src/risk/heuristic.py) categorizing scenes into `LOW`, `MODERATE`, `HIGH`, or `CRITICAL` hazard states. |
+| **Automated Dispatch Directives** | Translates hazard classifications directly into emergency response protocols (`NO FIRE DETECTED`, `INVESTIGATE`, `DEPLOY UNITS`, `EVACUATE`). |
+| **Sub-Second Telemetry Pipeline** | Adaptive high-resolution frame downscaling (`max_dim = 1280`) prior to OpenCV JPEG encoding and Base64 serialization for minimal network latency. |
+| **Historical Analytics & Audit Ledger** | Embedded SQLite persistence ([`DetectionHistory`](src/storage/history.py)) powering interactive Area, Composed, Radar, and Donut visualizations. |
 
 ---
 
-## Features
+## 🏗 System Architecture
 
-- **Real-time Inference:** Lightning-fast detection powered by PyTorch and Ultralytics YOLOv8.
-- **Risk Heuristic Engine:** Proprietary algorithm that evaluates the severity of the detection.
-- **Multi-Modal Input:** Support for static images, video processing, and live webcam streams.
-- **Interactive Analytics:** Deep visual insights using Recharts and an integrated SQLite data logger.
-- **Decoupled Architecture:** A lightweight, premium Next.js frontend paired with a heavy-duty FastAPI Python backend.
-
----
-
-## Architecture
-
-SCARLET employs a modern decoupled architecture, allowing for scalable deployments where the heavy GPU ML tasks are separated from the client-facing UI.
+SCARLET separates compute-intensive neural network inference from the operator UI through a stateless REST boundary backed by persistent telemetry storage:
 
 ```mermaid
-graph TD;
-    Client[Next.js React Frontend] -->|REST API Request| Backend[FastAPI Backend];
-    Backend --> ML[ScarletDetector YOLOv8 Engine];
-    ML --> Heuristic[Risk Assessment Engine];
-    Heuristic --> DB[(SQLite Detection History)];
-    Heuristic -->|JSON Response| Backend;
-    Backend -->|Processed Image + Data| Client;
+flowchart LR
+    subgraph Client["Next.js 16 Command Center (Port 3000)"]
+        UI["Control Center & Webcam Stream"]
+        Charts["Recharts Analytics Suite"]
+        HistoryUI["Audit History Ledger"]
+    end
+
+    subgraph Server["FastAPI Inference Service (Port 8000)"]
+        API["REST Endpoints (backend_app.py)"]
+        Proc["OpenCV ImageProcessor"]
+        YOLO["ScarletDetector (YOLOv8)"]
+        Risk["ScarletRiskHeuristic"]
+        DB[("SQLite History DB")]
+    end
+
+    UI -->|"Multipart / Base64 Frame"| API
+    API --> Proc --> YOLO --> Risk
+    Risk --> DB
+    Risk -->|"Annotated Frame + Telemetry JSON"| API --> UI
+    Charts & HistoryUI <-->|"GET /api/analytics & /api/history"| API
 ```
 
 ---
 
-## Quick Start
+## 🚨 Risk Heuristic & Dispatch Matrix
 
-To run SCARLET locally, you need to spin up both the FastAPI backend and the Next.js frontend.
+Raw bounding boxes are insufficient for automated emergency triage. [`ScarletRiskHeuristic`](src/risk/heuristic.py) correlates detection counts, confidence thresholds, and temporal persistence to assign an actionable hazard tier:
 
-### 1. Start the ML Backend (FastAPI)
-The backend requires Python 3.12+ and installs the necessary PyTorch and OpenCV libraries.
+| Risk Level | Image Trigger Criteria | Video Trigger Criteria | Dispatch Directive | Indicator |
+| :--- | :--- | :--- | :--- | :--- |
+| **LOW** | `total_detections == 0` or `max_confidence < 0.15` | `0` frames with detections | `NO FIRE DETECTED` | `#22c55e` (Green) |
+| **MODERATE** | `total_detections <= 3` and `max_confidence < 0.50`, or smoke-only (`fire_count == 0`) | `< 20%` of frames contain detections | `INVESTIGATE` | `#f59e0b` (Amber) |
+| **HIGH** | (`fire_count > 0` and `max_confidence >= 0.50`) or `total_detections > 3` | `>= 20%` of frames contain active fire signatures | `DEPLOY UNITS` | `#f97316` (Orange) |
+| **CRITICAL** | `fire_count >= 5` and `avg_confidence >= 0.60` | `>= 50%` of frames contain fire with `avg_confidence >= 0.50` | `EVACUATE` | `#ef4444` (Crimson) |
 
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- **Python** `3.11+` (with `pip` and `venv`)
+- **Node.js** `18.18+` or `20+` (with `npm`)
+- *(Optional)* **NVIDIA CUDA GPU** for hardware-accelerated PyTorch inference
+
+### Option 1: Local Development Setup
+
+#### 1. Clone the Repository
 ```bash
-# Clone the repository
 git clone https://github.com/m4n1kya/Scarlet.git
 cd Scarlet
+```
 
-# Activate virtual environment (Windows)
-.\.venv\Scripts\activate
+#### 2. Configure & Launch the FastAPI Backend
+```bash
+# Create and activate a virtual environment
+python -m venv .venv
 
-# Install dependencies (if not already installed)
+# Windows (PowerShell)
+.\.venv\Scripts\Activate.ps1
+# macOS / Linux
+source .venv/bin/activate
+
+# Install Python dependencies
 pip install -r requirements.txt
 
-# Start the FastAPI server
-uvicorn backend_app:app --reload --port 8000
+# Start the inference server on http://localhost:8000
+uvicorn backend_app:app --reload --host 0.0.0.0 --port 8000
 ```
-> API is now running at `http://localhost:8000`
 
-### 2. Start the Frontend (Next.js)
-The frontend requires Node.js (v18+).
-
+#### 3. Launch the Next.js Frontend
+Open a second terminal at the repository root:
 ```bash
-# Navigate to the frontend directory
 cd frontend
-
-# Install Node dependencies
 npm install
-
-# Start the development server
 npm run dev
 ```
-> Dashboard is now running at `http://localhost:3000`
+Navigate to **`http://localhost:3000`** to access the SCARLET Command Center.
+
+### Option 2: Docker Compose Deployment
+
+Spin up both the backend API and frontend web client in isolated containers:
+```bash
+docker compose up --build -d
+```
+
+### Environment Variables
+
+Copy `.env.example` to `.env` in the project root to customize runtime thresholds:
+
+| Variable | Default | Description |
+| :--- | :--- | :--- |
+| `SCARLET_CONFIDENCE` | `0.25` | Minimum YOLOv8 detection confidence threshold (`0.0` – `1.0`). |
+| `SCARLET_IOU` | `0.45` | Non-Maximum Suppression (NMS) Intersection-over-Union threshold. |
+| `SCARLET_DEVICE` | `auto` | Compute target (`auto`, `cuda`, or `cpu`). |
+| `SCARLET_OUTPUT_DIR` | `outputs` | Directory for SQLite history (`scarlet_history.db`) and exports. |
 
 ---
 
-## Repository Structure
+## 📡 API Reference
+
+When the backend is running, interactive OpenAPI (Swagger) documentation is available at `http://localhost:8000/docs`.
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/` | Health check endpoint returning service status. |
+| `GET` | `/api/system-info` | Returns active compute device (`cuda`/`cpu`), model load state, and class map. |
+| `POST` | `/api/detect/image` | Runs YOLOv8 inference on a multipart `file` or `image_base64` frame. |
+| `GET` | `/api/analytics` | Returns aggregated timeline series, class radar metrics, and risk distribution. |
+| `GET` | `/api/history` | Fetches recent detection records (`?limit=100`) from SQLite storage. |
+| `DELETE` | `/api/history` | Clears all stored detection records. |
+
+<details>
+<summary><strong>Example Response: <code>POST /api/detect/image</code></strong></summary>
+
+```json
+{
+  "fire_count": 3,
+  "smoke_count": 2,
+  "default_count": 0,
+  "total_detections": 5,
+  "max_confidence": 0.89,
+  "avg_confidence": 0.76,
+  "risk_level": "HIGH",
+  "risk_description": "High risk. Confirmed presence of fire or significant smoke.",
+  "annotated_image_base64": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQ...",
+  "inference_time_ms": 42.18,
+  "device": "cuda",
+  "fire_area_est": 14.6,
+  "dispatch_status": "DEPLOY UNITS"
+}
+```
+</details>
+
+---
+
+## 📂 Repository Structure
 
 ```text
 SCARLET/
-├── backend_app.py        # FastAPI entrypoint for the ML engine
-├── frontend/             # Next.js React Application
-│   ├── src/app/          # Page routing (Dashboard, Analytics, History)
-│   └── src/components/   # Reusable UI components
-├── models/               # Contains the YOLOv8 weights (best.pt)
-├── src/                  # Core Python modules
-│   ├── analytics/        # Charting and data aggregation
-│   ├── detection/        # YOLOv8 wrappers and image processors
-│   ├── risk/             # Heuristic rules engine
-│   └── storage/          # SQLite database integrations
-├── tests/                # Comprehensive Pytest suite
-└── assets/               # Demo media and documentation assets
+├── .github/
+│   ├── ISSUE_TEMPLATE/          # Bug report & feature request templates
+│   ├── workflows/ci.yml         # Automated Pytest & Next.js build CI pipeline
+│   ├── PULL_REQUEST_TEMPLATE.md # Standard PR checklist
+│   └── dependabot.yml           # Automated dependency security scanning
+├── assets/
+│   ├── docs/banner.jpeg         # Project header artwork
+│   └── sample_images/           # Reference fire & smoke test imagery
+├── data/
+│   ├── confusion_matrix.png     # Model evaluation confusion matrix
+│   ├── data.yaml                # Dataset class & split specification
+│   └── training_results.csv     # Epoch-by-epoch YOLOv8 training metrics
+├── docs/
+│   └── PROJECT_REPORT.md        # Comprehensive technical report & methodology
+├── frontend/                    # Next.js 16 App Router client application
+│   ├── public/                  # Static vector assets
+│   └── src/
+│       ├── app/                 # Routes: Control Center (/), Analytics, History, About
+│       └── components/          # Shared UI & WebGL shader components (EvilEye, Navigation)
+├── models/
+│   └── best.pt                  # Custom-trained YOLOv8s model weights
+├── notebooks/                   # Jupyter training & evaluation notebooks
+├── src/                         # Core Python package
+│   ├── analytics/analyzer.py    # Statistical & chart aggregation utilities
+│   ├── detection/               # ScarletDetector YOLOv8 engine & OpenCV processors
+│   ├── risk/heuristic.py        # ScarletRiskHeuristic evaluation engine
+│   ├── storage/history.py       # SQLite DetectionHistory persistence layer
+│   ├── utils/export.py          # CSV/JSON report export helpers
+│   └── config.py                # Environment-aware ScarletConfig dataclass
+├── tests/                       # Pytest unit & integration test suite
+├── Dockerfile                   # Container image definition for API deployment
+├── Makefile                     # Developer workflow automation targets
+├── backend_app.py               # FastAPI application entrypoint
+├── docker-compose.yml           # Full-stack multi-container orchestration
+├── pyproject.toml               # PEP 621 project metadata, Ruff & Pytest config
+└── requirements.txt             # Python runtime dependencies
 ```
 
 ---
 
-## Contributing
+## 🧪 Testing & Quality Assurance
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on how to submit pull requests, report issues, and request features.
+Run the automated test suite covering detector initialization, risk heuristic boundaries, SQLite CRUD operations, and analytics aggregation:
+
+```bash
+pytest tests/ -v
+```
 
 ---
 
-## License & Attributions
+## 🤝 Contributing & Governance
 
-- **Codebase:** Distributed under the MIT License.
-- **ML Engine:** Powered by [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics) (AGPL-3.0).
-- **Dataset:** Initial model trained on the [Roboflow fire-wrpgm v8](https://universe.roboflow.com/custom-thxhn/fire-wrpgm/dataset/8) (CC BY 4.0).
+Contributions, issues, and feature requests are welcome! Please review our community documents before submitting a pull request:
+
+- [Contributing Guidelines](CONTRIBUTING.md)
+- [Code of Conduct](CODE_OF_CONDUCT.md)
+- [Security Policy](SECURITY.md)
+- [Changelog](CHANGELOG.md)
+
+---
+
+## 📄 License & Acknowledgments
+
+- **License:** Distributed under the [MIT License](LICENSE).
+- **Object Detection Engine:** Powered by [Ultralytics YOLOv8](https://github.com/ultralytics/ultralytics).
+- **Training Dataset:** Derived from the [Roboflow `fire-wrpgm` v8 Dataset](https://universe.roboflow.com/custom-thxhn/fire-wrpgm/dataset/8) (CC BY 4.0).
 
 <div align="center">
-  <br>
-  Developed by <a href="https://github.com/m4n1kya">Manikya N.</a>
+  <br />
+  <p>Engineered by <a href="https://github.com/m4n1kya"><strong>Manikya Nariyal</strong></a></p>
 </div>
