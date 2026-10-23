@@ -80,7 +80,7 @@ export default function Dashboard() {
     }
 
     try {
-      const response = await axios.post("http://localhost:8000/api/detect/image", formData, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/detect/image`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       setResult(response.data);

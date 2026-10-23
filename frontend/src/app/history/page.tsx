@@ -10,7 +10,7 @@ export default function History() {
 
   const fetchHistory = () => {
     setLoading(true);
-    axios.get("http://localhost:8000/api/history?limit=100")
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/history?limit=100`)
       .then(res => {
         setRecords(res.data.records);
         setLoading(false);
@@ -28,7 +28,7 @@ export default function History() {
   const clearHistory = async () => {
     if (!confirm("Are you sure you want to delete all history?")) return;
     try {
-      await axios.delete("http://localhost:8000/api/history");
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/history`);
       fetchHistory();
     } catch (e) {
       alert("Failed to clear history");

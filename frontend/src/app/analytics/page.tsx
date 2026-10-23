@@ -31,7 +31,7 @@ export default function Analytics() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get("http://localhost:8000/api/analytics")
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/analytics`)
       .then(res => {
         setData(res.data);
         setLoading(false);

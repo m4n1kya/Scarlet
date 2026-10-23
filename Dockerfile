@@ -20,8 +20,9 @@ COPY src/ /app/src/
 COPY models/ /app/models/
 COPY backend_app.py /app/
 
-# Expose port 7860 (Hugging Face Spaces requirement)
-EXPOSE 7860
+# Render default port
+ENV PORT=10000
+EXPOSE 10000
 
-# Command to run the FastAPI app on the Hugging Face port
-CMD ["uvicorn", "backend_app:app", "--host", "0.0.0.0", "--port", "7860"]
+# Command to run the FastAPI app adapting to Render's $PORT
+CMD ["sh", "-c", "uvicorn backend_app:app --host 0.0.0.0 --port ${PORT:-10000}"]
