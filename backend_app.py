@@ -82,6 +82,13 @@ async def detect_image(
         else:
             raise HTTPException(status_code=400, detail="Must provide file or image_base64")
 
+        # Downscale large images before inference to optimize CPU latency
+        max_input_dim = 640
+        ih, iw = image.shape[:2]
+        if max(ih, iw) > max_input_dim:
+            scale = max_input_dim / max(ih, iw)
+            image = cv2.resize(image, (int(iw * scale), int(ih * scale)), interpolation=cv2.INTER_AREA)
+
         start_time = time.time()
         
         # Run detection

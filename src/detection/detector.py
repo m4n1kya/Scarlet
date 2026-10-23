@@ -62,6 +62,8 @@ class ScarletDetector:
 
         try:
             from ultralytics import YOLO
+            import torch
+            torch.set_num_threads(2)
             self.model = YOLO(str(model_path))
             # Resolve device
             device = self.config.device
