@@ -78,20 +78,29 @@ export default function Dashboard() {
     if (progressIntervalRef.current) clearTimeout(progressIntervalRef.current);
     let current = 1;
 
-    // Smooth continuous progression that NEVER freezes or gets stuck on any number.
-    // Progressively paces through 1 to 99 across ~38s with active ticking at every single step.
-    const tick = () => {
-      let delay = 280;
-      if (current >= 95) {
-        delay = 1400; // Continues ticking 95 -> 96 -> 97 -> 98 -> 99 smoothly
-      } else if (current >= 85) {
-        delay = 750;
-      } else if (current >= 60) {
-        delay = 400;
+    // Fast initial 25 numbers, then gradual smooth deceleration.
+    // Perfectly calibrated so it continuously advances and NEVER stalls at 97 or 99.
+    const getDelay = (val: number): number => {
+      if (val <= 25) {
+        // Fast initial feedback (120ms - 180ms)
+        return 120 + val * 2.5;
       }
+      if (val <= 60) {
+        // Smooth transition (200ms - 480ms)
+        return 200 + (val - 25) * 8;
+      }
+      if (val <= 85) {
+        // Steady neural inference pacing (500ms - 950ms)
+        return 500 + (val - 60) * 18;
+      }
+      // Gentle asymptotic progression (1000ms - 1600ms)
+      return 1000 + (val - 85) * 45;
+    };
 
+    const tick = () => {
+      const delay = getDelay(current);
       progressIntervalRef.current = setTimeout(() => {
-        if (current < 99) {
+        if (current < 98) {
           current += 1;
           setInferenceProgress(current);
           tick();
@@ -124,15 +133,29 @@ export default function Dashboard() {
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       if (progressIntervalRef.current) clearTimeout(progressIntervalRef.current);
-      setInferenceProgress(100);
-      setResult(response.data);
+
+      // Smooth rapid roll to 100% — prevents sudden jumps and never gets stuck
+      let p = current;
+      const finishRoll = () => {
+        if (p < 100) {
+          p = Math.min(100, p + Math.max(1, Math.round((100 - p) / 2)));
+          setInferenceProgress(p);
+          setTimeout(finishRoll, 45);
+        } else {
+          setResult(response.data);
+          setTimeout(() => {
+            setIsProcessing(false);
+            setTimeout(() => setInferenceProgress(0), 1200);
+          }, 600);
+        }
+      };
+      finishRoll();
     } catch (error) {
+      if (progressIntervalRef.current) clearTimeout(progressIntervalRef.current);
       console.error("API Error during inference", error);
       alert("Detection failed. Make sure the backend is running.");
-    } finally {
-      if (progressIntervalRef.current) clearTimeout(progressIntervalRef.current);
       setIsProcessing(false);
-      setTimeout(() => setInferenceProgress(0), 1400);
+      setInferenceProgress(0);
     }
   };
 
