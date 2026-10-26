@@ -32,8 +32,16 @@ export default function Dashboard() {
   const [isDragging, setIsDragging] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<DetectionResult | null>(null);
+  const [inferenceProgress, setInferenceProgress] = useState(0);
+  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   
   const webcamRef = useRef<Webcam>(null);
+
+  useEffect(() => {
+    return () => {
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    };
+  }, []);
 
   // File drag handlers
   const handleDragOver = (e: React.DragEvent) => {
@@ -65,30 +73,68 @@ export default function Dashboard() {
   // Process image via API
   const processDetection = async (base64Image?: string) => {
     setIsProcessing(true);
+    setInferenceProgress(0);
+
+    // Calibrated progress curve (~36s total for CPU inference on Render free tier)
+    // Phases: [from%, to%, durationMs]
+    const PHASES: [number, number, number][] = [
+      [0,  8,  1800],   // upload & send
+      [8,  30, 7000],   // model warmup
+      [30, 85, 22000],  // neural network inference
+      [85, 97, 5200],   // encode & transmit
+    ];
+    const TICK = 120;
+    let elapsed = 0;
+    if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+
+    progressIntervalRef.current = setInterval(() => {
+      elapsed += TICK;
+      let ms = 0;
+      let next = 97;
+      for (const [from, to, dur] of PHASES) {
+        if (elapsed <= ms + dur) {
+          const t = Math.min((elapsed - ms) / dur, 1);
+          const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+          next = Math.round(from + (to - from) * eased);
+          break;
+        }
+        ms += dur;
+      }
+      setInferenceProgress(Math.min(next, 97));
+    }, TICK);
+
     const formData = new FormData();
     formData.append("confidence", "0.25");
     formData.append("iou", "0.45");
 
     if (mode === "webcam" && typeof base64Image === 'string') {
       formData.append("image_base64", base64Image);
-      setPreview(base64Image); 
+      setPreview(base64Image);
     } else if (file) {
       formData.append("file", file);
     } else {
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
       setIsProcessing(false);
+      setInferenceProgress(0);
       return;
     }
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/detect/image`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/detect/image`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      setInferenceProgress(100);
       setResult(response.data);
     } catch (error) {
       console.error("API Error during inference", error);
       alert("Detection failed. Make sure the backend is running.");
     } finally {
+      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
       setIsProcessing(false);
+      setTimeout(() => setInferenceProgress(0), 1400);
     }
   };
 
@@ -223,20 +269,43 @@ export default function Dashboard() {
               )}
             </div>
 
+            {/* Numerical Progress Counter */}
+            {isProcessing && (
+              <div className="bg-white/[0.02] border border-white/5 rounded-lg p-3 space-y-2 mb-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[9px] font-mono tracking-widest text-gray-400 uppercase flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-gray-400 animate-pulse" />
+                    Neural Pipeline
+                  </span>
+                  <span className="text-[9px] font-mono text-gray-500 uppercase tracking-wider">
+                    {inferenceProgress < 15 ? "Transmitting Frame" : inferenceProgress < 35 ? "Warming Tensors" : inferenceProgress < 85 ? "Running Inference" : "Synthesizing Telemetry"}
+                  </span>
+                </div>
+                <div className="flex items-baseline justify-between pt-1">
+                  <span className="text-3xl font-mono font-bold text-gray-200 tracking-tight tabular-nums">
+                    {String(inferenceProgress).padStart(3, "0")}
+                    <span className="text-xs font-normal text-gray-500 ml-1">%</span>
+                  </span>
+                  <span className="text-[10px] font-mono text-gray-500 uppercase tracking-widest">
+                    Est. ~36s
+                  </span>
+                </div>
+              </div>
+            )}
+
             <button
               onClick={() => mode === "image" ? processDetection() : captureWebcam()}
               disabled={(mode === "image" && !file) || isProcessing}
               className={clsx(
                 "w-full py-3 rounded-md font-bold transition-all duration-300 shadow-lg text-xs uppercase tracking-widest border",
-                ((mode === "image" && !file) || isProcessing) 
-                  ? "bg-white/[0.02] text-gray-700 border-white/5 cursor-not-allowed" 
+                ((mode === "image" && !file) || isProcessing)
+                  ? "bg-white/[0.02] text-gray-700 border-white/5 cursor-not-allowed"
                   : "bg-gray-300 text-black border-transparent hover:bg-white"
               )}
             >
               {isProcessing ? (
-                <span className="flex items-center justify-center gap-2">
-                  <div className="w-3.5 h-3.5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                  Processing...
+                <span className="flex items-center justify-center gap-2 font-mono">
+                  {String(inferenceProgress)}{"% — PROCESSING"}
                 </span>
               ) : mode === "webcam" ? (
                 <span className="flex items-center justify-center gap-2">
