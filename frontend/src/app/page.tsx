@@ -33,13 +33,13 @@ export default function Dashboard() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [result, setResult] = useState<DetectionResult | null>(null);
   const [inferenceProgress, setInferenceProgress] = useState(0);
-  const progressIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const progressIntervalRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   
   const webcamRef = useRef<Webcam>(null);
 
   useEffect(() => {
     return () => {
-      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      if (progressIntervalRef.current) clearTimeout(progressIntervalRef.current);
     };
   }, []);
 
@@ -73,35 +73,33 @@ export default function Dashboard() {
   // Process image via API
   const processDetection = async (base64Image?: string) => {
     setIsProcessing(true);
-    setInferenceProgress(0);
+    setInferenceProgress(1);
 
-    // Calibrated progress curve (~36s total for CPU inference on Render free tier)
-    // Phases: [from%, to%, durationMs]
-    const PHASES: [number, number, number][] = [
-      [0,  8,  1800],   // upload & send
-      [8,  30, 7000],   // model warmup
-      [30, 85, 22000],  // neural network inference
-      [85, 97, 5200],   // encode & transmit
-    ];
-    const TICK = 120;
-    let elapsed = 0;
-    if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+    if (progressIntervalRef.current) clearTimeout(progressIntervalRef.current);
+    let current = 1;
 
-    progressIntervalRef.current = setInterval(() => {
-      elapsed += TICK;
-      let ms = 0;
-      let next = 97;
-      for (const [from, to, dur] of PHASES) {
-        if (elapsed <= ms + dur) {
-          const t = Math.min((elapsed - ms) / dur, 1);
-          const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-          next = Math.round(from + (to - from) * eased);
-          break;
-        }
-        ms += dur;
+    // Smooth continuous progression that NEVER freezes or gets stuck on any number.
+    // Progressively paces through 1 to 99 across ~38s with active ticking at every single step.
+    const tick = () => {
+      let delay = 280;
+      if (current >= 95) {
+        delay = 1400; // Continues ticking 95 -> 96 -> 97 -> 98 -> 99 smoothly
+      } else if (current >= 85) {
+        delay = 750;
+      } else if (current >= 60) {
+        delay = 400;
       }
-      setInferenceProgress(Math.min(next, 97));
-    }, TICK);
+
+      progressIntervalRef.current = setTimeout(() => {
+        if (current < 99) {
+          current += 1;
+          setInferenceProgress(current);
+          tick();
+        }
+      }, delay);
+    };
+
+    tick();
 
     const formData = new FormData();
     formData.append("confidence", "0.25");
@@ -113,7 +111,7 @@ export default function Dashboard() {
     } else if (file) {
       formData.append("file", file);
     } else {
-      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      if (progressIntervalRef.current) clearTimeout(progressIntervalRef.current);
       setIsProcessing(false);
       setInferenceProgress(0);
       return;
@@ -125,14 +123,14 @@ export default function Dashboard() {
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
-      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      if (progressIntervalRef.current) clearTimeout(progressIntervalRef.current);
       setInferenceProgress(100);
       setResult(response.data);
     } catch (error) {
       console.error("API Error during inference", error);
       alert("Detection failed. Make sure the backend is running.");
     } finally {
-      if (progressIntervalRef.current) clearInterval(progressIntervalRef.current);
+      if (progressIntervalRef.current) clearTimeout(progressIntervalRef.current);
       setIsProcessing(false);
       setTimeout(() => setInferenceProgress(0), 1400);
     }
@@ -278,7 +276,7 @@ export default function Dashboard() {
                     Neural Pipeline
                   </span>
                   <span className="text-[9px] font-mono text-gray-500 uppercase tracking-wider">
-                    {inferenceProgress < 15 ? "Transmitting Frame" : inferenceProgress < 35 ? "Warming Tensors" : inferenceProgress < 85 ? "Running Inference" : "Synthesizing Telemetry"}
+                    {inferenceProgress < 15 ? "Transmitting Frame" : inferenceProgress < 40 ? "Warming Tensors" : inferenceProgress < 85 ? "Running Inference" : inferenceProgress < 100 ? "Synthesizing Telemetry" : "Analysis Complete"}
                   </span>
                 </div>
                 <div className="flex items-baseline justify-between pt-1">
@@ -305,7 +303,7 @@ export default function Dashboard() {
             >
               {isProcessing ? (
                 <span className="flex items-center justify-center gap-2 font-mono">
-                  {String(inferenceProgress)}{"% — PROCESSING"}
+                  {inferenceProgress >= 100 ? "100% — COMPLETE" : `${String(inferenceProgress)}% — PROCESSING`}
                 </span>
               ) : mode === "webcam" ? (
                 <span className="flex items-center justify-center gap-2">
